@@ -13,7 +13,7 @@ import jakarta.validation.constraints.Size;
 public class Difficulty {
 
     /**
-     * Surrogate key representing an internal id for the difficulty level
+     * The surrogate key representing an internal id for the difficulty level
      */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
