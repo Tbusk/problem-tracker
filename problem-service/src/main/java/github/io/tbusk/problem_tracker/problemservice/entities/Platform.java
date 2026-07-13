@@ -33,14 +33,14 @@ public class Platform {
     /**
      * Gets the platform id
      *
-     * @return platform id
+     * @return the platform id
      */
     public Short getId() {
         return id;
     }
 
     /**
-     * Gets the platform name
+     * Gets the platform name, e.g., Leetcode
      *
      * @return the platform name
      */
@@ -51,7 +51,7 @@ public class Platform {
     /**
      * Updates the platform name
      *
-     * @param name new platform name
+     * @param name the new platform name
      */
     public void setName(String name) {
         this.name = name;

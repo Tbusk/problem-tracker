@@ -13,7 +13,7 @@ import jakarta.validation.constraints.Size;
 public class Category {
 
     /**
-     * Surrogate key representing an internal id for the category
+     * The surrogate key representing an internal id for the category
      */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -21,7 +21,7 @@ public class Category {
     private Byte id;
 
     /**
-     * User-facing name of the category, e.g. HashMap
+     * The user-facing name of the category, e.g., HashMap
      */
     @Column(name = "NAME", unique = true, nullable = false)
     @Size(min = 2, max = 128)
@@ -31,25 +31,25 @@ public class Category {
     /**
      * Gets the category id
      *
-     * @return category id
+     * @return the category id
      */
     public Byte getId() {
         return id;
     }
 
     /**
-     * Gets the category name
+     * Gets the category name, e.g., String
      *
-     * @return category name
+     * @return the category name
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Updates the category's name
+     * Updates the category name
      *
-     * @param name new category name
+     * @param name the new category name
      */
     public void setName(String name) {
         this.name = name;
