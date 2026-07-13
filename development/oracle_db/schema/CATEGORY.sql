@@ -1,20 +1,27 @@
-create table CATEGORY
+CREATE SEQUENCE CATEGORY_SEQ
+    MINVALUE 1
+    MAXVALUE 999
+    START WITH 1
+    INCREMENT BY 1
+    CACHE 25;
+
+CREATE TABLE CATEGORY
 (
-    ID   NUMBER(3) default "PROBLEM_TRACKER"."ISEQ$$_72918".nextval generated as identity
-		constraint CATEGORY_PK
-			primary key,
-    NAME CHAR(128) default not null
-        constraint CATEGORY_UK
-            unique
+    ID   NUMBER(3) DEFAULT "PROBLEM_TRACKER"."CATEGORY_SEQ".NEXTVAL
+		CONSTRAINT CATEGORY_PK
+			PRIMARY KEY,
+    NAME VARCHAR2(128) DEFAULT NOT NULL
+        CONSTRAINT CATEGORY_UK
+            UNIQUE
 )
 /
 
-INSERT INTO PROBLEM_TRACKER.CATEGORY (ID, NAME) VALUES (32, 'String                                                                                                                          ');
-INSERT INTO PROBLEM_TRACKER.CATEGORY (ID, NAME) VALUES (33, 'Set                                                                                                                             ');
-INSERT INTO PROBLEM_TRACKER.CATEGORY (ID, NAME) VALUES (34, 'HashMap                                                                                                                         ');
-INSERT INTO PROBLEM_TRACKER.CATEGORY (ID, NAME) VALUES (35, 'Queue                                                                                                                           ');
-INSERT INTO PROBLEM_TRACKER.CATEGORY (ID, NAME) VALUES (36, 'Stack                                                                                                                           ');
-INSERT INTO PROBLEM_TRACKER.CATEGORY (ID, NAME) VALUES (37, 'Binary Search                                                                                                                   ');
-INSERT INTO PROBLEM_TRACKER.CATEGORY (ID, NAME) VALUES (38, 'Array                                                                                                                           ');
-INSERT INTO PROBLEM_TRACKER.CATEGORY (ID, NAME) VALUES (39, 'Sorting                                                                                                                         ');
-INSERT INTO PROBLEM_TRACKER.CATEGORY (ID, NAME) VALUES (40, 'Linked List                                                                                                                     ');
+INSERT INTO PROBLEM_TRACKER.CATEGORY (ID, NAME) VALUES (32, 'String');
+INSERT INTO PROBLEM_TRACKER.CATEGORY (ID, NAME) VALUES (33, 'Set');
+INSERT INTO PROBLEM_TRACKER.CATEGORY (ID, NAME) VALUES (34, 'HashMap');
+INSERT INTO PROBLEM_TRACKER.CATEGORY (ID, NAME) VALUES (35, 'Queue');
+INSERT INTO PROBLEM_TRACKER.CATEGORY (ID, NAME) VALUES (36, 'Stack');
+INSERT INTO PROBLEM_TRACKER.CATEGORY (ID, NAME) VALUES (37, 'Binary Search');
+INSERT INTO PROBLEM_TRACKER.CATEGORY (ID, NAME) VALUES (38, 'Array');
+INSERT INTO PROBLEM_TRACKER.CATEGORY (ID, NAME) VALUES (39, 'Sorting');
+INSERT INTO PROBLEM_TRACKER.CATEGORY (ID, NAME) VALUES (40, 'Linked List');

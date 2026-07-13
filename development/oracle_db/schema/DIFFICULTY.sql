@@ -1,12 +1,19 @@
-create table DIFFICULTY
+CREATE SEQUENCE DIFFICULTY_SEQ
+    MINVALUE 1
+    MAXVALUE 99
+    START WITH 1
+    INCREMENT BY 1
+    CACHE 10;
+
+CREATE TABLE DIFFICULTY
 (
-    ID   NUMBER(2) generated as identity
-        constraint DIFFICULTY_PK
-            primary key,
-    NAME CHAR(128) not null
+    ID   NUMBER(2) DEFAULT "PROBLEM_TRACKER"."DIFFICULTY_SEQ".NEXTVAL
+        CONSTRAINT DIFFICULTY_PK
+            PRIMARY KEY,
+    NAME VARCHAR2(128) NOT NULL
 )
 /
 
-INSERT INTO PROBLEM_TRACKER.DIFFICULTY (ID, NAME) VALUES (4, 'Easy                                                                                                                            ');
-INSERT INTO PROBLEM_TRACKER.DIFFICULTY (ID, NAME) VALUES (5, 'Medium                                                                                                                          ');
-INSERT INTO PROBLEM_TRACKER.DIFFICULTY (ID, NAME) VALUES (6, 'Hard                                                                                                                            ');
+INSERT INTO PROBLEM_TRACKER.DIFFICULTY (NAME) VALUES ('Easy');
+INSERT INTO PROBLEM_TRACKER.DIFFICULTY (NAME) VALUES ('Medium');
+INSERT INTO PROBLEM_TRACKER.DIFFICULTY (NAME) VALUES ('Hard');

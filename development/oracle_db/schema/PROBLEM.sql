@@ -1,17 +1,24 @@
-create table PROBLEM
+CREATE SEQUENCE PROBLEM_SEQ
+    MINVALUE 1
+    MAXVALUE 999999999
+    START WITH 1
+    INCREMENT BY 1
+    CACHE 30;
+
+CREATE TABLE PROBLEM
 (
-    ID            NUMBER(9) default "PROBLEM_TRACKER"."ISEQ$$_72907".nextval generated as identity
-		constraint PROBLEMS_PK
-			primary key,
-    NAME          CHAR(128)           not null,
-    URL           CHAR(512)           not null,
-    PLATFORM_ID   NUMBER(3) default 0 not null
-        constraint PROBLEMS_PLATFORM_ID_FK
-            references PLATFORM,
-    DIFFICULTY_ID NUMBER(2) default 0 not null
-        constraint PROBLEM_DIFFICULTY_ID_FK
-            references DIFFICULTY
-                on delete cascade
+    ID            NUMBER(9) DEFAULT "PROBLEM_TRACKER"."PROBLEM_SEQ".NEXTVAL
+		CONSTRAINT PROBLEMS_PK
+			PRIMARY KEY,
+    NAME          VARCHAR2(128)       NOT NULL,
+    URL           VARCHAR2(512)       NOT NULL,
+    PLATFORM_ID   NUMBER(3) DEFAULT 0 NOT NULL
+        CONSTRAINT PROBLEMS_PLATFORM_ID_FK
+            REFERENCES PLATFORM,
+    DIFFICULTY_ID NUMBER(2) DEFAULT 0 NOT NULL
+        CONSTRAINT PROBLEM_DIFFICULTY_ID_FK
+            REFERENCES DIFFICULTY
+                ON DELETE CASCADE
 )
 /
 

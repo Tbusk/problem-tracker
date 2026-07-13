@@ -1,19 +1,26 @@
-create table USER_PROBLEMS
+CREATE SEQUENCE USER_PROBLEMS_SEQ
+    MINVALUE 1
+    MAXVALUE 999999999999999
+    START WITH 1
+    INCREMENT BY 1
+    CACHE 30;
+
+CREATE TABLE USER_PROBLEMS
 (
-    ID                      NUMBER(18)   default "PROBLEM_TRACKER"."ISEQ$$_72934".nextval generated as identity
-		constraint USER_PROBLEMS_PK
-			primary key,
-    USER_ID                 NUMBER(12)             not null
-        constraint USER_PROBLEMS_USER_ID_FK
-            references "USER",
-    PROBLEM_ID              NUMBER(8)              not null
-        constraint USER_PROBLEMS_PROBLEM_ID_FK
-            references PROBLEM,
-    SOLVED_ON               TIMESTAMP(6)           not null,
-    MINUTES                 NUMBER(3, 2) default 0 not null,
-    PROGRAMMING_LANGUAGE_ID NUMBER(4)    default 0 not null
-        constraint USER_PROBLEMS_PROGRAMMING_LANGUAGE_ID_FK
-            references PROGRAMMING_LANGUAGE
+    ID                      NUMBER(15)   DEFAULT "PROBLEM_TRACKER"."USER_PROBLEMS_SEQ".NEXTVAL
+		CONSTRAINT USER_PROBLEMS_PK
+			PRIMARY KEY,
+    USER_ID                 NUMBER(12)             NOT NULL
+        CONSTRAINT USER_PROBLEMS_USER_ID_FK
+            REFERENCES "USER",
+    PROBLEM_ID              NUMBER(8)              NOT NULL
+        CONSTRAINT USER_PROBLEMS_PROBLEM_ID_FK
+            REFERENCES PROBLEM,
+    SOLVED_ON               TIMESTAMP(6)           NOT NULL,
+    MINUTES                 NUMBER(3, 2) DEFAULT 0 NOT NULL,
+    PROGRAMMING_LANGUAGE_ID NUMBER(4)    DEFAULT 0 NOT NULL
+        CONSTRAINT USER_PROBLEMS_PROGRAMMING_LANGUAGE_ID_FK
+            REFERENCES PROGRAMMING_LANGUAGE
 )
 /
 

@@ -1,15 +1,22 @@
-create table PROGRAMMING_LANGUAGE
+CREATE SEQUENCE PROGRAMMING_LANGUAGE_SEQ
+    MINVALUE 1
+    MAXVALUE 9999
+    START WITH 1
+    INCREMENT BY 1
+    CACHE 10;
+
+CREATE TABLE PROGRAMMING_LANGUAGE
 (
-    ID   NUMBER(4) generated as identity
-        constraint PROGRAMMING_LANGUAGE_PK
-            primary key,
-    NAME CHAR(128) not null
-        constraint PROGRAMMING_LANGUAGE_PK_2
-            unique
+    ID   NUMBER(4) DEFAULT "PROBLEM_TRACKER"."PROGRAMMING_LANGUAGE_SEQ".NEXTVAL
+        CONSTRAINT PROGRAMMING_LANGUAGE_PK
+            PRIMARY KEY,
+    NAME VARCHAR2(128) NOT NULL
+        CONSTRAINT PROGRAMMING_LANGUAGE_PK_2
+            UNIQUE
 )
 /
 
-INSERT INTO PROBLEM_TRACKER.PROGRAMMING_LANGUAGE (ID, NAME) VALUES (1, 'Java                                                                                                                            ');
-INSERT INTO PROBLEM_TRACKER.PROGRAMMING_LANGUAGE (ID, NAME) VALUES (2, 'JavaScript                                                                                                                      ');
-INSERT INTO PROBLEM_TRACKER.PROGRAMMING_LANGUAGE (ID, NAME) VALUES (3, 'TypeScript                                                                                                                      ');
-INSERT INTO PROBLEM_TRACKER.PROGRAMMING_LANGUAGE (ID, NAME) VALUES (4, 'Python                                                                                                                          ');
+INSERT INTO PROBLEM_TRACKER.PROGRAMMING_LANGUAGE (NAME) VALUES ('Java');
+INSERT INTO PROBLEM_TRACKER.PROGRAMMING_LANGUAGE (NAME) VALUES ('JavaScript');
+INSERT INTO PROBLEM_TRACKER.PROGRAMMING_LANGUAGE (NAME) VALUES ('TypeScript');
+INSERT INTO PROBLEM_TRACKER.PROGRAMMING_LANGUAGE (NAME) VALUES ('Python');

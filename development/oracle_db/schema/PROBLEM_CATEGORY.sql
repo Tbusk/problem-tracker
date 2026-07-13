@@ -1,15 +1,15 @@
-create table PROBLEM_CATEGORY
+CREATE TABLE PROBLEM_CATEGORY
 (
-    PROBLEM_ID  NUMBER(9) not null
-        constraint PROBLEMS_CATEGORY_PROBLEMS_ID_FK
-            references PROBLEM
-                on delete cascade,
-    CATEGORY_ID NUMBER(3) not null
-        constraint PROBLEMS_CATEGORY_CATEGORY_ID_FK
-            references CATEGORY
-                on delete cascade,
-    constraint PROBLEMS_CATEGORY_PK
-        primary key (PROBLEM_ID, CATEGORY_ID)
+    PROBLEM_ID  NUMBER(9) NOT NULL
+        CONSTRAINT PROBLEMS_CATEGORY_PROBLEMS_ID_FK
+            REFERENCES PROBLEM
+                ON DELETE CASCADE,
+    CATEGORY_ID NUMBER(3) NOT NULL
+        CONSTRAINT PROBLEMS_CATEGORY_CATEGORY_ID_FK
+            REFERENCES CATEGORY
+                ON DELETE CASCADE,
+    CONSTRAINT PROBLEMS_CATEGORY_PK
+        PRIMARY KEY (PROBLEM_ID, CATEGORY_ID)
 )
 /
 
