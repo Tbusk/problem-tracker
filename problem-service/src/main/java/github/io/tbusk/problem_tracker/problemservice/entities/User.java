@@ -3,6 +3,7 @@ package github.io.tbusk.problem_tracker.problemservice.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -19,7 +20,7 @@ public class User {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "user_seq", sequenceName = "USER_SEQ")
+    @SequenceGenerator(name = "user_seq", sequenceName = "USER_SEQ", allocationSize = 1)
     private Long id;
 
     /**
@@ -35,6 +36,7 @@ public class User {
      */
     @Column(name = "CREATED_ON", nullable = false)
     @NotNull
+    @CreationTimestamp
     private LocalDateTime createdOn;
 
     /**

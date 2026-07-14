@@ -17,7 +17,7 @@ public class ProgrammingLanguage {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "programming_language_seq", sequenceName = "PROGRAMMING_LANGUAGE_SEQ")
+    @SequenceGenerator(name = "programming_language_seq", sequenceName = "PROGRAMMING_LANGUAGE_SEQ", allocationSize = 1)
     private Short id;
 
     /**

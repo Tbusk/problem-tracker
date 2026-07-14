@@ -17,7 +17,7 @@ public class Category {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "category_seq", sequenceName = "CATEGORY_SEQ")
+    @SequenceGenerator(name = "category_seq", sequenceName = "CATEGORY_SEQ", allocationSize = 1)
     private Byte id;
 
     /**

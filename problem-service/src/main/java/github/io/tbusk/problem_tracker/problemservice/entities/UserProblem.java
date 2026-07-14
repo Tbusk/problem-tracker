@@ -18,7 +18,7 @@ public class UserProblem {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "user_problem_seq", sequenceName = "USER_PROBLEM_SEQ")
+    @SequenceGenerator(name = "user_problem_seq", sequenceName = "USER_PROBLEM_SEQ", allocationSize = 1)
     private Long id;
 
     /**

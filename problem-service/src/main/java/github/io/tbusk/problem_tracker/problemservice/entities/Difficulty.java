@@ -17,7 +17,7 @@ public class Difficulty {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "difficulty_seq", sequenceName = "DIFFICULTY_SEQ")
+    @SequenceGenerator(name = "difficulty_seq", sequenceName = "DIFFICULTY_SEQ", allocationSize = 1)
     private Byte id;
 
     /**

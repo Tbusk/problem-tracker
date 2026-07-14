@@ -18,7 +18,7 @@ public class Platform {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "platform_seq", sequenceName = "PLATFORM_SEQ")
+    @SequenceGenerator(name = "platform_seq", sequenceName = "PLATFORM_SEQ", allocationSize = 1)
     @Column(name = "ID")
     private Short id;
 
