@@ -10,6 +10,7 @@ import github.io.tbusk.problem_tracker.problemservice.platform.PlatformRepositor
 import github.io.tbusk.problem_tracker.problemservice.problem.database.Problem;
 import github.io.tbusk.problem_tracker.problemservice.problem.database.ProblemRepository;
 import github.io.tbusk.problem_tracker.problemservice.problem.dtos.CreateProblemDTO;
+import github.io.tbusk.problem_tracker.problemservice.problem.exceptions.ProblemAlreadyExistsException;
 import github.io.tbusk.problem_tracker.problemservice.problem.exceptions.ProblemNameValidationException;
 import github.io.tbusk.problem_tracker.problemservice.problem.exceptions.ProblemUrlValidationException;
 import github.io.tbusk.problem_tracker.problemservice.problem.sanitizers.ProblemSanitizer;
@@ -44,12 +45,13 @@ public class CreateProblemService {
 
     /**
      * Creates a new competitive programming problem from the given DTO.
-     * Validates all input fields, sanitizes the name, resolves the difficulty and platform,
-     * and persists the problem to the database.
+     * Validates all input fields, sanitizes the name, resolves the difficulty and platform, verifies the problem
+     * doesn't already exist in db, and persists the problem to the database.
      *
      * @param createRequest the DTO containing the problem's name, URL, difficulty, and platform
      * @return a success response indicating the problem was added
-     * @throws ProblemServiceException  if the difficulty or platform is not found, or if validation fails
+     * @throws ProblemServiceException  if the difficulty or platform is not found, if validation fails, or if it
+     *                                  already exists in the database
      * @throws IllegalArgumentException if any required field in the DTO is null
      */
     public SuccessResponseDTO create(final CreateProblemDTO createRequest) throws ProblemServiceException {
@@ -103,9 +105,21 @@ public class CreateProblemService {
             throw new ProblemUrlValidationException(createRequest.url());
         }
 
-        // TODO: make sure record doesn't already exist in repo - don't want duplicates
+        String sanitizedUrl = ProblemSanitizer.sanitizeUrl(createRequest.url().trim());
 
-        problem.setUrl(createRequest.url().trim());
+        problem.setUrl(sanitizedUrl);
+
+        Optional<Problem> existingProblem = problemRepository.findByDetails(
+                sanitizedName,
+                sanitizedUrl,
+                difficulty.get().getName(),
+                platform.get().getName()
+        );
+
+        // do not want duplicates - which this aims to prevent that
+        if (existingProblem.isPresent()) {
+            throw new ProblemAlreadyExistsException();
+        }
 
         problemRepository.save(problem);
 
