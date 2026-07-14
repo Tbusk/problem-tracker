@@ -1,5 +1,7 @@
-package github.io.tbusk.problem_tracker.problemservice.entities;
+package github.io.tbusk.problem_tracker.problemservice.problemCategory;
 
+import github.io.tbusk.problem_tracker.problemservice.category.Category;
+import github.io.tbusk.problem_tracker.problemservice.problem.database.Problem;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 

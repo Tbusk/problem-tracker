@@ -1,4 +1,4 @@
-package github.io.tbusk.problem_tracker.problemservice.entities;
+package github.io.tbusk.problem_tracker.problemservice.problemCategory;
 
 import java.io.Serializable;
 import java.util.Objects;

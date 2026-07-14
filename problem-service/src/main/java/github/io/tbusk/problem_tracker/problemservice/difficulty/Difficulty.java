@@ -1,4 +1,4 @@
-package github.io.tbusk.problem_tracker.problemservice.entities;
+package github.io.tbusk.problem_tracker.problemservice.difficulty;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

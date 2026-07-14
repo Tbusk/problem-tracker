@@ -1,5 +1,8 @@
-package github.io.tbusk.problem_tracker.problemservice.entities;
+package github.io.tbusk.problem_tracker.problemservice.userProblem;
 
+import github.io.tbusk.problem_tracker.problemservice.problem.database.Problem;
+import github.io.tbusk.problem_tracker.problemservice.programmingLanguage.ProgrammingLanguage;
+import github.io.tbusk.problem_tracker.problemservice.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
