@@ -19,7 +19,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-//TODO: add javadoc for CreateProblemService
+/**
+ * Service responsible for creating and persisting new competitive programming problems.
+ */
 @Service
 public class CreateProblemService {
 
@@ -27,15 +29,29 @@ public class CreateProblemService {
     private DifficultyRepository difficultyRepository;
     private PlatformRepository platformRepository;
 
-    //TODO: add javadoc for constructor CreateProblemService()
+    /**
+     * Creates a service instance with the required repositories
+     *
+     * @param problemRepository    repository for persisting problems
+     * @param difficultyRepository repository for resolving difficulty levels
+     * @param platformRepository   repository for resolving platforms
+     */
     public CreateProblemService(ProblemRepository problemRepository, DifficultyRepository difficultyRepository, PlatformRepository platformRepository) {
         this.problemRepository = problemRepository;
         this.difficultyRepository = difficultyRepository;
         this.platformRepository = platformRepository;
     }
 
-    //TODO: add javadoc for create()
-    //TODO: add more tests for create()
+    /**
+     * Creates a new competitive programming problem from the given DTO.
+     * Validates all input fields, sanitizes the name, resolves the difficulty and platform,
+     * and persists the problem to the database.
+     *
+     * @param createRequest the DTO containing the problem's name, URL, difficulty, and platform
+     * @return a success response indicating the problem was added
+     * @throws ProblemServiceException  if the difficulty or platform is not found, or if validation fails
+     * @throws IllegalArgumentException if any required field in the DTO is null
+     */
     public SuccessResponseDTO create(final CreateProblemDTO createRequest) throws ProblemServiceException {
         if (createRequest == null) {
             throw new IllegalArgumentException("CreateProblemDTO cannot be empty");

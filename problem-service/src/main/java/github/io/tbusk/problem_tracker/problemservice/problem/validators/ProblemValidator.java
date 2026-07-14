@@ -1,14 +1,27 @@
 package github.io.tbusk.problem_tracker.problemservice.problem.validators;
 
-//TODO: add javadoc for ProblemValidator, constants, validateName(), and validateUrl()
+/**
+ * Utility class for validating problem name and URL fields.
+ *
+ * It currently validates length and nullability constraints.
+ */
 public class ProblemValidator {
 
+    /** Minimum allowed length for a problem name */
     public static final int NAME_MINIMUM_LENGTH = 2;
+    /** Maximum allowed length for a problem name */
     public static final int NAME_MAXIMUM_LENGTH = 128;
+    /** Minimum allowed length for a problem URL */
     public static final int URL_MINIMUM_LENGTH = 10;
+    /** Maximum allowed length for a problem URL */
     public static final int URL_MAXIMUM_LENGTH = 512;
 
-    //TODO: add tests for validateName()
+    /**
+     * Validates a problem name is not null and falls within the allowed length range
+     *
+     * @param name the problem name to validate
+     * @return true if the name is valid, false otherwise
+     */
     public static boolean validateName(String name) {
         if (name == null) {
             return false;
@@ -25,7 +38,12 @@ public class ProblemValidator {
         return true;
     }
 
-    //TODO: add tests for validateUrl()
+    /**
+     * Validates a problem URL is not null and falls within the allowed length range
+     *
+     * @param url the problem URL to validate
+     * @return true if the URL is valid, false otherwise
+     */
     public static boolean validateUrl(String url) {
         if (url == null) {
             return false;
