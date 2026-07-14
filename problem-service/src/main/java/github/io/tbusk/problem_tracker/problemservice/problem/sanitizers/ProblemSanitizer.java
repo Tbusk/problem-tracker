@@ -1,5 +1,7 @@
 package github.io.tbusk.problem_tracker.problemservice.problem.sanitizers;
 
+import org.springframework.web.util.HtmlUtils;
+
 /**
  * Utility class for sanitizing problem names by removing invalid characters.
  *
@@ -22,6 +24,14 @@ public class ProblemSanitizer {
      * @return the sanitized name containing only valid characters
      */
     public static String sanitizeName(String name) {
+
+        if (name == null) {
+            throw new IllegalArgumentException("Problem name cannot be null");
+        }
+
+        if (name.isEmpty()) {
+            throw new IllegalArgumentException("Problem name cannot be empty");
+        }
 
         if (validNameCharacters == null) {
             setupValidNameCharacters();
@@ -61,5 +71,25 @@ public class ProblemSanitizer {
         validNameCharacters['-']++;
         validNameCharacters['!']++;
         validNameCharacters[' ']++;
+    }
+
+
+    /**
+     * Santizes a problem url by escaping special characters and trimming whitespace.
+     *
+     * @param url the problem URL to sanitize
+     * @return the sanitized URL with special characters escaped and whitespace trimmed
+     */
+    public static String sanitizeUrl(String url) {
+
+        if (url == null) {
+            throw new IllegalArgumentException("Problem url cannot be null");
+        }
+
+        if (url.isEmpty()) {
+            throw new IllegalArgumentException("Problem url cannot be empty");
+        }
+
+        return HtmlUtils.htmlEscape(url.trim());
     }
 }
