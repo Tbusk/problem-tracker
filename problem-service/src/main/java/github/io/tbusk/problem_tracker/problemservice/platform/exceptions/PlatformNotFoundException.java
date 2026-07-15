@@ -1,4 +1,4 @@
-package github.io.tbusk.problem_tracker.problemservice.platform;
+package github.io.tbusk.problem_tracker.problemservice.platform.exceptions;
 
 import github.io.tbusk.problem_tracker.problemservice.exception.ProblemServiceException;
 
