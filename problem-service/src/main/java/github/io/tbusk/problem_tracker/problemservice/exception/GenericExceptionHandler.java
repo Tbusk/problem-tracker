@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import java.net.URISyntaxException;
+
 @RestControllerAdvice
 public class GenericExceptionHandler {
 
@@ -32,5 +34,11 @@ public class GenericExceptionHandler {
     @ExceptionHandler(PageTooSmallException.class)
     private ErrorResponseDTO handlePageTooSmallException(PageTooSmallException ex) {
         return new ErrorResponseDTO(ex.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(URISyntaxException.class)
+    private ErrorResponseDTO handleURISyntaxException(URISyntaxException ex) {
+        return new ErrorResponseDTO("The url you supplied is not valid. Please check your url, and try again.");
     }
 }
