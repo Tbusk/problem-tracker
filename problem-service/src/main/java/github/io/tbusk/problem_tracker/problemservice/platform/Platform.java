@@ -31,8 +31,15 @@ public class Platform {
     private String name;
 
     /**
+     * The domain of the platform, e.g., leetcode.com
+     */
+    @Column(name = "DOMAIN", nullable = false, unique = true)
+    @NotNull
+    @Size(min = 3, max = 32)
+    private String domain;
+
+    /**
      * Gets the platform id
-     *
      * @return the platform id
      */
     public Short getId() {
@@ -41,7 +48,6 @@ public class Platform {
 
     /**
      * Gets the platform name, e.g., Leetcode
-     *
      * @return the platform name
      */
     public String getName() {
@@ -50,10 +56,25 @@ public class Platform {
 
     /**
      * Updates the platform name
-     *
      * @param name the new platform name
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * Gets the domain of the platform, e.g., leetcode.com
+     * @return the domain of the platform
+     */
+    public String getDomain() {
+        return domain;
+    }
+
+    /**
+     * Updates the domain of the platform
+     * @param domain the new domain of the platform
+     */
+    public void setDomain(String domain) {
+        this.domain = domain;
     }
 }
