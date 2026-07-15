@@ -18,7 +18,14 @@ public interface CategoryRepository extends Repository<Category, Byte> {
      * @return a collection of category names
      */
     @Query("select name from Category")
-    Collection<String> findAll();
+    Collection<String> findAllNames();
+
+    /**
+     * Retrieves all categories from the database
+     *
+     * @return a collection of categories
+     */
+    Collection<Category> findAll();
 
     /**
      * Finds a category by its exact name
