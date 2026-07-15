@@ -1,6 +1,5 @@
 package github.io.tbusk.problem_tracker.problemservice.platform;
 
-import github.io.tbusk.problem_tracker.problemservice.platform.PlatformRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

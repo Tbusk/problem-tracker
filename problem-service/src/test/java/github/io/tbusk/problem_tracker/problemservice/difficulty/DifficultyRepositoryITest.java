@@ -1,6 +1,5 @@
 package github.io.tbusk.problem_tracker.problemservice.difficulty;
 
-import github.io.tbusk.problem_tracker.problemservice.difficulty.DifficultyRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
