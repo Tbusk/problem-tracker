@@ -5,7 +5,7 @@ import java.net.URI;
 /**
  * Utility class for validating problem name and URL fields.
  * <p>
- * It currently validates length, nullability, scheme, and domain constraints.
+ * It currently validates length, nullability, scheme, path, and domain constraints.
  */
 public class ProblemValidator {
 
@@ -25,6 +25,11 @@ public class ProblemValidator {
      * Maximum allowed length for a problem URL
      */
     public static final int URL_MAXIMUM_LENGTH = 512;
+
+    /**
+     * Minimum allowed length for a problem URL path
+     */
+    public static final int URL_PATH_MINIMUM_LENGTH = 4;
 
     /**
      * Validates a problem name is not null and falls within the allowed length range
@@ -62,6 +67,10 @@ public class ProblemValidator {
             throw new IllegalArgumentException("URL cannot be empty");
         }
 
+        if (platformDomain == null) {
+            throw new IllegalArgumentException("Platform domain cannot be empty");
+        }
+
         if (url.trim().length() < URL_MINIMUM_LENGTH) {
             throw new IllegalArgumentException(String.format("URL must be at least %d characters long", URL_MINIMUM_LENGTH));
         }
@@ -88,7 +97,7 @@ public class ProblemValidator {
             throw new IllegalArgumentException(String.format("URL must have a domain matching its platform domain of %s", platformDomain));
         }
 
-        if (uri.getPath() == null) {
+        if (uri.getPath() == null || uri.getPath().isEmpty() || uri.getPath().length() < URL_PATH_MINIMUM_LENGTH) {
             throw new IllegalArgumentException("URL must have a path");
         }
 
