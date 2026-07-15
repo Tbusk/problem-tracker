@@ -1,6 +1,7 @@
 package github.io.tbusk.problem_tracker.problemservice.problem.sanitizers;
 
-import org.owasp.encoder.Encode;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * Utility class for sanitizing problem names by removing invalid characters.
@@ -86,12 +87,12 @@ public class ProblemSanitizer {
 
 
     /**
-     * Santizes a problem url by escaping special characters and trimming whitespace.
+     * Santizes a problem url by removing everything but the scheme, authority, and path
      *
      * @param url the problem URL to sanitize
-     * @return the sanitized URL with special characters escaped and whitespace trimmed
+     * @return the sanitized URL with just the scheme, authority, and path
      */
-    public static String sanitizeUrl(String url) {
+    public static String sanitizeUrl(String url) throws URISyntaxException {
 
         if (url == null) {
             throw new IllegalArgumentException("Problem url cannot be null");
@@ -101,6 +102,8 @@ public class ProblemSanitizer {
             throw new IllegalArgumentException("Problem url cannot be empty");
         }
 
-        return Encode.forHtmlAttribute(url.trim());
+        URI uri = URI.create(url);
+
+        return new URI(uri.getScheme(), uri.getAuthority(), uri.getPath(), null, null).toString();
     }
 }
