@@ -1,11 +1,11 @@
 package github.io.tbusk.problem_tracker.problemservice.problem.services;
 
 import github.io.tbusk.problem_tracker.problemservice.difficulty.Difficulty;
-import github.io.tbusk.problem_tracker.problemservice.difficulty.DifficultyNotFoundException;
+import github.io.tbusk.problem_tracker.problemservice.difficulty.exceptions.DifficultyNotFoundException;
 import github.io.tbusk.problem_tracker.problemservice.difficulty.DifficultyRepository;
 import github.io.tbusk.problem_tracker.problemservice.exception.ProblemServiceException;
 import github.io.tbusk.problem_tracker.problemservice.platform.Platform;
-import github.io.tbusk.problem_tracker.problemservice.platform.PlatformNotFoundException;
+import github.io.tbusk.problem_tracker.problemservice.platform.exceptions.PlatformNotFoundException;
 import github.io.tbusk.problem_tracker.problemservice.platform.PlatformRepository;
 import github.io.tbusk.problem_tracker.problemservice.problem.database.Problem;
 import github.io.tbusk.problem_tracker.problemservice.problem.database.ProblemRepository;
