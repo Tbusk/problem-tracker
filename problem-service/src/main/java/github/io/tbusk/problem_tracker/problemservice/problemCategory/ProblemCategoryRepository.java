@@ -20,11 +20,10 @@ public interface ProblemCategoryRepository extends Repository<ProblemCategory, P
     ProblemCategory save(ProblemCategory problemCategory);
 
     /**
-     * Finds all categories associated with a given problem
+     * Saves a collection of problem-category mappings to the database
      *
-     * @param id the id of the problem whose categories to retrieve
-     * @return a collection of problem-category mappings for the problem
+     * @param problemCategories the mappings to persist
+     * @return the saved mappings
      */
-    Collection<ProblemCategory> findAllByProblem_Id(Integer id);
-
+    Collection<ProblemCategory> saveAll(Iterable<ProblemCategory> problemCategories);
 }

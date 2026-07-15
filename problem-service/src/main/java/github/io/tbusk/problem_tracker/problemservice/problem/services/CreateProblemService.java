@@ -1,12 +1,12 @@
 package github.io.tbusk.problem_tracker.problemservice.problem.services;
 
 import github.io.tbusk.problem_tracker.problemservice.difficulty.Difficulty;
-import github.io.tbusk.problem_tracker.problemservice.difficulty.exceptions.DifficultyNotFoundException;
 import github.io.tbusk.problem_tracker.problemservice.difficulty.DifficultyRepository;
+import github.io.tbusk.problem_tracker.problemservice.difficulty.exceptions.DifficultyNotFoundException;
 import github.io.tbusk.problem_tracker.problemservice.exception.ProblemServiceException;
 import github.io.tbusk.problem_tracker.problemservice.platform.Platform;
-import github.io.tbusk.problem_tracker.problemservice.platform.exceptions.PlatformNotFoundException;
 import github.io.tbusk.problem_tracker.problemservice.platform.PlatformRepository;
+import github.io.tbusk.problem_tracker.problemservice.platform.exceptions.PlatformNotFoundException;
 import github.io.tbusk.problem_tracker.problemservice.problem.database.Problem;
 import github.io.tbusk.problem_tracker.problemservice.problem.database.ProblemRepository;
 import github.io.tbusk.problem_tracker.problemservice.problem.dtos.CreateProblemDTO;
@@ -15,6 +15,7 @@ import github.io.tbusk.problem_tracker.problemservice.problem.exceptions.Problem
 import github.io.tbusk.problem_tracker.problemservice.problem.exceptions.ProblemUrlValidationException;
 import github.io.tbusk.problem_tracker.problemservice.problem.sanitizers.ProblemSanitizer;
 import github.io.tbusk.problem_tracker.problemservice.problem.validators.ProblemValidator;
+import github.io.tbusk.problem_tracker.problemservice.problemCategory.ProblemCategoryService;
 import github.io.tbusk.problem_tracker.problemservice.response.SuccessResponseDTO;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,7 @@ public class CreateProblemService {
     private ProblemRepository problemRepository;
     private DifficultyRepository difficultyRepository;
     private PlatformRepository platformRepository;
+    private ProblemCategoryService problemCategoryService;
 
     /**
      * Creates a service instance with the required repositories
@@ -38,10 +40,11 @@ public class CreateProblemService {
      * @param difficultyRepository repository for resolving difficulty levels
      * @param platformRepository   repository for resolving platforms
      */
-    public CreateProblemService(ProblemRepository problemRepository, DifficultyRepository difficultyRepository, PlatformRepository platformRepository) {
+    public CreateProblemService(ProblemRepository problemRepository, DifficultyRepository difficultyRepository, PlatformRepository platformRepository, ProblemCategoryService problemCategoryService) {
         this.problemRepository = problemRepository;
         this.difficultyRepository = difficultyRepository;
         this.platformRepository = platformRepository;
+        this.problemCategoryService = problemCategoryService;
     }
 
     /**
@@ -76,6 +79,14 @@ public class CreateProblemService {
             throw new IllegalArgumentException("Url cannot be empty");
         }
 
+        if (createRequest.categories() == null) {
+            throw new IllegalArgumentException("Categories cannot be empty");
+        }
+
+        if (createRequest.categories().isEmpty()) {
+            throw new IllegalArgumentException("Please add at least one category");
+        }
+
         Problem problem = new Problem();
 
         Optional<Difficulty> difficulty = difficultyRepository.findByName(createRequest.difficulty().trim());
@@ -88,7 +99,7 @@ public class CreateProblemService {
 
         Optional<Platform> platform = platformRepository.findByName(createRequest.platformName().trim());
 
-        if (platform.isEmpty()) {
+        if (!platform.isPresent()) {
             throw new PlatformNotFoundException(createRequest.platformName());
         }
 
@@ -112,7 +123,6 @@ public class CreateProblemService {
 
         Optional<Problem> existingProblem = problemRepository.findByDetails(
                 sanitizedName,
-                sanitizedUrl,
                 difficulty.get().getName(),
                 platform.get().getName()
         );
@@ -122,7 +132,10 @@ public class CreateProblemService {
             throw new ProblemAlreadyExistsException();
         }
 
-        problemRepository.save(problem);
+        problem = problemRepository.save(problem);
+
+        // add categories
+        problemCategoryService.createAll(problem, createRequest.categories());
 
         return new SuccessResponseDTO("Problem has been added successfully.");
     }

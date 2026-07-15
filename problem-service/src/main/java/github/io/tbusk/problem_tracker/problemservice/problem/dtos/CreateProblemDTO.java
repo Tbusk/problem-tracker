@@ -2,6 +2,8 @@ package github.io.tbusk.problem_tracker.problemservice.problem.dtos;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.util.List;
+
 /**
  * DTO used in the request to create a new problem
  *
@@ -21,6 +23,9 @@ public record CreateProblemDTO(
         String platformName,
 
         @Schema(description = "The difficulty level of the problem", example = "Easy")
-        String difficulty
+        String difficulty,
+
+        @Schema(description = "The categories of the problem", example = "String, HashMap")
+        List<String> categories
 ) {
 }
