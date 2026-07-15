@@ -18,6 +18,7 @@ import github.io.tbusk.problem_tracker.problemservice.problem.validators.Problem
 import github.io.tbusk.problem_tracker.problemservice.response.SuccessResponseDTO;
 import org.springframework.stereotype.Service;
 
+import java.net.URISyntaxException;
 import java.util.Optional;
 
 /**
@@ -54,7 +55,7 @@ public class CreateProblemService {
      *                                  already exists in the database
      * @throws IllegalArgumentException if any required field in the DTO is null
      */
-    public SuccessResponseDTO create(final CreateProblemDTO createRequest) throws ProblemServiceException {
+    public SuccessResponseDTO create(final CreateProblemDTO createRequest) throws ProblemServiceException, URISyntaxException {
         if (createRequest == null) {
             throw new IllegalArgumentException("CreateProblemDTO cannot be empty");
         }
@@ -101,7 +102,7 @@ public class CreateProblemService {
 
         problem.setName(sanitizedName);
 
-        if (!ProblemValidator.validateUrl(createRequest.url())) {
+        if (!ProblemValidator.validateUrl(createRequest.url(), platform.get().getDomain())) {
             throw new ProblemUrlValidationException(createRequest.url());
         }
 
