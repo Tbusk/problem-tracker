@@ -31,6 +31,6 @@ public interface ProblemRepository extends PagingAndSortingRepository<Problem, I
      * @param platform the platform the problem is from
      * @return an Optional containing the problem if found, otherwise empty
      */
-    @Query("select p from Problem p where p.name = :name and p.url = :url and p.difficulty = :difficulty and p.platform = :platform limit 1")
+    @Query("select p from Problem p where p.name = :name and p.url = :url and p.difficulty.name = :difficulty and p.platform.name = :platform limit 1")
     Optional<Problem> findByDetails(String name, String url, String difficulty, String platform);
 }
