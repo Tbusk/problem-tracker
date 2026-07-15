@@ -1,6 +1,6 @@
 package github.io.tbusk.problem_tracker.problemservice.problem.sanitizers;
 
-import org.springframework.web.util.HtmlUtils;
+import org.owasp.encoder.Encode;
 
 /**
  * Utility class for sanitizing problem names by removing invalid characters.
@@ -29,12 +29,15 @@ public class ProblemSanitizer {
             throw new IllegalArgumentException("Problem name cannot be null");
         }
 
-        if (name.isEmpty()) {
+        if (name.isBlank()) {
             throw new IllegalArgumentException("Problem name cannot be empty");
         }
 
+        // remove extra whitespaces
+        name = name.trim();
+
         if (validNameCharacters == null) {
-            setupValidNameCharacters();
+            validNameCharacters = getValidNameCharacters();
         }
 
         StringBuilder builder = new StringBuilder();
@@ -49,28 +52,36 @@ public class ProblemSanitizer {
     }
 
     /**
-     * Populates the valid name characters lookup table with lowercase letters, uppercase letters,
+     * Populates a character lookup table with lowercase letters, uppercase letters, numbers,
      * parentheses, hyphens, exclamation marks, and spaces.
      */
-    static void setupValidNameCharacters() {
-        validNameCharacters = new char[127];
+    public static char[] getValidNameCharacters() {
+        // ascii printable chars up to 127
+        char[] validChars = new char[127];
 
         // add lowercase
         for (int i = 0; i < 26; i++) {
-            validNameCharacters[i + 'a']++;
+            validChars[i + 'a']++;
         }
 
         // add uppercase
         for (int i = 0; i < 26; i++) {
-            validNameCharacters[i + 'A']++;
+            validChars[i + 'A']++;
+        }
+
+        // add numbers
+        for (int i = 0; i < 10; i++) {
+            validChars[i + '0']++;
         }
 
         // add specials and space
-        validNameCharacters['(']++;
-        validNameCharacters[')']++;
-        validNameCharacters['-']++;
-        validNameCharacters['!']++;
-        validNameCharacters[' ']++;
+        validChars['(']++;
+        validChars[')']++;
+        validChars['-']++;
+        validChars['!']++;
+        validChars[' ']++;
+
+        return validChars;
     }
 
 
@@ -86,10 +97,10 @@ public class ProblemSanitizer {
             throw new IllegalArgumentException("Problem url cannot be null");
         }
 
-        if (url.isEmpty()) {
+        if (url.isBlank()) {
             throw new IllegalArgumentException("Problem url cannot be empty");
         }
 
-        return HtmlUtils.htmlEscape(url.trim());
+        return Encode.forHtmlAttribute(url.trim());
     }
 }
