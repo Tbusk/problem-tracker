@@ -21,7 +21,7 @@ public class CategoryRepositoryITest {
 
     @Test
     void findAll_returns_expected() {
-        Set<String> categories = new HashSet<>(categoryRepository.findAll());
+        Set<String> categories = new HashSet<>(categoryRepository.findAllNames());
 
         assertEquals(71, categories.size());
 
