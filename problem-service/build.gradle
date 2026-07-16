@@ -26,6 +26,7 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:3.0.2'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.2'
     implementation 'org.springdoc:springdoc-openapi-javadoc:1.8.0'
+    implementation 'org.springframework.cloud:spring-cloud-starter-config:5.0.4'
     annotationProcessor 'com.github.therapi:therapi-runtime-javadoc-scribe:0.15.0'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
