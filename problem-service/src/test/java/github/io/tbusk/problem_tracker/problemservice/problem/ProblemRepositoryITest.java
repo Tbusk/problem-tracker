@@ -65,4 +65,34 @@ public class ProblemRepositoryITest {
         // checking id is added to object after it persists
         assertNotNull(problem.getId());
     }
+
+    @Test
+    void findByDetails_finds_problems() {
+        Problem problem = new Problem();
+        problem.setName("Binary Search");
+
+        Optional<Platform> possiblePlatform = platformRepository.findByName("Leetcode");
+        assertTrue(possiblePlatform.isPresent());
+
+        problem.setPlatform(possiblePlatform.get());
+
+        Optional<Difficulty> possibleDifficulty = difficultyRepository.findByName("Easy");
+        assertTrue(possibleDifficulty.isPresent());
+
+        problem.setDifficulty(possibleDifficulty.get());
+        problem.setUrl("https://leetcode.com/problems/binary-search");
+
+        problem = problemRepository.save(problem);
+
+        Optional<Problem> potentialProblem = problemRepository.findByDetails(problem.getName(), problem.getDifficulty().getName(), problem.getPlatform().getName());
+
+        assertTrue(potentialProblem.isPresent());
+
+        assertFalse(problemRepository.findByDetails("Binary Search and Sort", problem.getDifficulty().getName(), problem.getPlatform().getName()).isPresent());
+        assertFalse(problemRepository.findByDetails("Delete a node", problem.getDifficulty().getName(), problem.getPlatform().getName()).isPresent());
+        assertFalse(problemRepository.findByDetails("Binary Search", "Hard", problem.getPlatform().getName()).isPresent());
+        assertFalse(problemRepository.findByDetails("Binary Search", "Medium", problem.getPlatform().getName()).isPresent());
+        assertFalse(problemRepository.findByDetails("Binary Search", problem.getDifficulty().getName(), "Hackerrank").isPresent());
+        assertFalse(problemRepository.findByDetails("Binary Search", problem.getDifficulty().getName(), "Algo Monster").isPresent());
+    }
 }
