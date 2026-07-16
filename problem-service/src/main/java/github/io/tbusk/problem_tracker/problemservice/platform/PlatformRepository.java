@@ -27,6 +27,7 @@ public interface PlatformRepository extends Repository<Platform, Short> {
      * @param name the platform name to search for, e.g., "Leetcode"
      * @return an Optional containing the platform if found, otherwise empty
      */
+    @Query("select p from Platform p where lower(p.name) like lower(:name)")
     Optional<Platform> findByName(String name);
 
 }
