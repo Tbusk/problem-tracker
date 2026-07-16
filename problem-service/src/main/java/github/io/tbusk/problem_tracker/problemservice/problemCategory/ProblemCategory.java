@@ -35,6 +35,21 @@ public class ProblemCategory implements Serializable {
     private Category category;
 
     /**
+     * Constructs a new ProblemCategory instance that maps a competitive programming problem to a category.
+     *
+     * @param problem  the competitive programming problem, e.g., FizzBuzz.
+     * @param category the category of the problem, e.g., String.
+     */
+    public ProblemCategory(Problem problem, Category category) {
+        this.problem = problem;
+        this.category = category;
+    }
+
+    public ProblemCategory() {
+
+    }
+
+    /**
      * Gets the competitive programming problem, e.g., FizzBuzz
      *
      * @return the problem
