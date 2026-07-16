@@ -93,7 +93,8 @@ public class ProblemValidator {
             throw new IllegalArgumentException("URL must have a domain");
         }
 
-        if (!uri.getAuthority().equals(platformDomain)) {
+        // allow items with prefixes such as www rather than full comparison
+        if (!uri.getAuthority().endsWith(platformDomain)) {
             throw new IllegalArgumentException(String.format("URL must have a domain matching its platform domain of %s", platformDomain));
         }
 
