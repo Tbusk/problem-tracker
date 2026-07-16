@@ -26,11 +26,10 @@ public interface ProblemRepository extends PagingAndSortingRepository<Problem, I
      * Used primarily to check if a problem already exists in the database to prevent duplicates.
      *
      * @param name the name of the problem
-     * @param url the url of the problem
      * @param difficulty the difficulty of the problem
      * @param platform the platform the problem is from
      * @return an Optional containing the problem if found, otherwise empty
      */
-    @Query("select p from Problem p where p.name = :name and p.url = :url and p.difficulty.name = :difficulty and p.platform.name = :platform limit 1")
-    Optional<Problem> findByDetails(String name, String url, String difficulty, String platform);
+    @Query("select p from Problem p where p.name = :name and p.difficulty.name = :difficulty and p.platform.name = :platform limit 1")
+    Optional<Problem> findByDetails(String name, String difficulty, String platform);
 }
