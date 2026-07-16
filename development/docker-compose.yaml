@@ -7,9 +7,24 @@ services:
     ports:
       - "1521:1521"
     environment:
-      - ORACLE_PWD=
+      - ORACLE_PWD=Abc1234
     volumes:
       - oracledb:/opt/oracle/oradata
 
+  problem-service:
+    container_name: problem-service
+    build:
+      context: ../problem-service
+      dockerfile: Dockerfile
+      args:
+        - VERSION=0.1.0
+        - NAME=problem-service
+    restart: unless-stopped
+    environment:
+      - PORT=8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
 volumes:
   oracledb:
