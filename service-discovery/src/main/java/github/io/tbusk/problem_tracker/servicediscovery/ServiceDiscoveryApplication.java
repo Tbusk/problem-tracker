@@ -4,6 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 
+/**
+ * Entry point for the service discovery server, which enables dynamic service registration
+ * and discovery for all microservices in the system.
+ */
 @SpringBootApplication
 @EnableEurekaServer
 public class ServiceDiscoveryApplication {

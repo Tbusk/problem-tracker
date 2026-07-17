@@ -11,21 +11,30 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
 
+/**
+ * Configures Spring Security for the API gateway.
+ * Disables CSRF, basic auth, and form login, adds JWT authentication filtering, and permits
+ * unauthenticated access to authentication and account creation endpoints.
+ */
 @EnableWebFluxSecurity
 @Configuration
 public class SecurityConfig {
 
     private final JwtRequestFilter jwtRequestFilter;
 
+    /**
+     * @param jwtRequestFilter the JWT filter that validates tokens on each request
+     */
     public SecurityConfig(JwtRequestFilter jwtRequestFilter) {
         this.jwtRequestFilter = jwtRequestFilter;
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
+    /**
+     * Configures the reactive security filter chain with JWT-based stateless authentication.
+     *
+     * @param http the HTTP security configuration
+     * @return the configured security web filter chain
+     */
     @Bean
     public SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) throws Exception {
         return http

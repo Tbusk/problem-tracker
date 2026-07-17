@@ -10,17 +10,37 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * Service responsible for authenticating users by verifying their credentials against the database
+ * and issuing JWT tokens.
+ */
 @Service
 public class AuthenticationService {
 
     private UserRepository userRepository;
     private JwtService jwtService;
 
+    /**
+     * Creates a service instance with the required repositories and JWT service.
+     *
+     * @param userRepository repository for looking up user accounts
+     * @param jwtService     service for creating JWT tokens
+     */
     public AuthenticationService(UserRepository userRepository, JwtService jwtService) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
     }
 
+    /**
+     * Authenticates a user by their email and password.
+     * Validates the email address format, checks the user exists and is not locked or disabled,
+     * and verifies the password against the stored hash.
+     *
+     * @param createJwtRequest the credentials containing email and password
+     * @return a JWT token for the authenticated user
+     * @throws AuthenticationException  if the email or password is invalid, or the account is locked or disabled
+     * @throws IllegalArgumentException if the request or any required field is null
+     */
     public JwtToken authenticate(CreateJwtRequest createJwtRequest) throws AuthenticationException {
 
         if (createJwtRequest == null) {
@@ -60,6 +80,13 @@ public class AuthenticationService {
         return new JwtToken(jwtService.createToken(user));
     }
 
+    /**
+     * Validates the format of the supplied email address.
+     *
+     * @param emailAddress the email address to validate
+     * @return true if the email address is valid
+     * @throws IllegalArgumentException if the email address is too long or does not match the expected pattern
+     */
     private boolean validateEmailAddress(String emailAddress) {
 
         int maxLength = 255;
@@ -75,6 +102,13 @@ public class AuthenticationService {
         return true;
     }
 
+    /**
+     * Verifies a guessed password against the stored BCrypt hash.
+     *
+     * @param passwordHash    the stored hashed password
+     * @param guessedPassword the password to verify
+     * @return true if the password matches the hash, false otherwise
+     */
     private boolean validatePassword(String passwordHash, String guessedPassword) {
         return BCrypt.checkpw(guessedPassword, passwordHash);
     }

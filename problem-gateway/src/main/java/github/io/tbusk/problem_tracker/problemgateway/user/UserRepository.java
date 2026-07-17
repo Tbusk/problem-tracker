@@ -10,6 +10,12 @@ import java.util.Optional;
 @org.springframework.stereotype.Repository
 public interface UserRepository extends Repository<User, Long> {
 
+    /**
+     * Finds a user by their email address.
+     *
+     * @param emailAddress the email address to search for
+     * @return an Optional containing the user if found, otherwise empty
+     */
     Optional<User> findByEmailAddress(String emailAddress);
 
 }

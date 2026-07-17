@@ -9,33 +9,67 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.net.URISyntaxException;
 
+/**
+ * Handles exceptions related to general application issues, such as bad requests, invalid URIs, and
+ * pagination errors.
+ */
 @RestControllerAdvice
 public class GenericExceptionHandler {
 
+    /**
+     * Handles exceptions related to an illegal argument being passed to the application.
+     *
+     * @param ex the exception
+     * @return error response DTO
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalArgumentException.class)
     private ErrorResponseDTO handleIllegalArgumentException(IllegalArgumentException ex) {
         return new ErrorResponseDTO("Invalid argument: " + ex.getMessage());
     }
 
+    /**
+     * Handles exceptions related to a resource not being found.
+     *
+     * @param ex the exception
+     * @return error response DTO
+     */
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoResourceFoundException.class)
-    private ErrorResponseDTO handleIllegalArgumentException(NoResourceFoundException ex) {
+    private ErrorResponseDTO handleNoResourceFoundException(NoResourceFoundException ex) {
         return new ErrorResponseDTO("Please check your url again. The resource you are looking for does not exist.");
     }
 
+    /**
+     * Handles exceptions related to the requested page size being outside valid bounds.
+     *
+     * @param ex the exception
+     * @return error response DTO
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(PageSizeOutsideBoundsException.class)
     private ErrorResponseDTO handlePageSizeOutsideBoundsException(PageSizeOutsideBoundsException ex) {
         return new ErrorResponseDTO(ex.getMessage());
     }
 
+    /**
+     * Handles exceptions related to the requested page number being too small.
+     *
+     * @param ex the exception
+     * @return error response DTO
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(PageTooSmallException.class)
     private ErrorResponseDTO handlePageTooSmallException(PageTooSmallException ex) {
         return new ErrorResponseDTO(ex.getMessage());
     }
 
+    /**
+     * Handles exceptions related to an invalid URI being provided.
+     *
+     * @param ex the exception
+     * @return error response DTO
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(URISyntaxException.class)
     private ErrorResponseDTO handleURISyntaxException(URISyntaxException ex) {

@@ -4,6 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
+/**
+ * Entry point for the API gateway, which routes requests to downstream microservices and handles
+ * JWT-based authentication.
+ */
 @SpringBootApplication
 @EnableDiscoveryClient
 public class ProblemGatewayApplication {

@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * Service responsible for creating and persisting new user accounts.
+ */
 @Service
 public class CreateAccountService {
 
@@ -20,6 +23,14 @@ public class CreateAccountService {
     private PasswordEncoder passwordEncoder;
     private PasswordCheckerService passwordCheckerService;
 
+    /**
+     * Creates a service instance with the required repositories and utilities.
+     *
+     * @param userRepository         repository for persisting user accounts
+     * @param roleRepository         repository for resolving roles
+     * @param passwordEncoder        encoder for hashing the user's password
+     * @param passwordCheckerService utility for validating password strength
+     */
     public CreateAccountService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, PasswordCheckerService passwordCheckerService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -27,6 +38,16 @@ public class CreateAccountService {
         this.passwordCheckerService = passwordCheckerService;
     }
 
+    /**
+     * Creates a new user account from the given request.
+     * Validates the input, checks for duplicate email addresses, hashes the password, assigns the default
+     * role, and persists the user to the database.
+     *
+     * @param request the DTO containing the user's email address and password
+     * @return a success response indicating the account was created
+     * @throws InvalidPasswordException if the supplied password does not meet requirements
+     * @throws IllegalArgumentException if any required field is null or the email address is already in use
+     */
     public CreateSuccessDTO create(CreateRequestDTO request) throws InvalidPasswordException {
 
         if (request == null) {

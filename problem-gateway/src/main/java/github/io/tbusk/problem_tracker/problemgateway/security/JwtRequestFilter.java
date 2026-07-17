@@ -16,15 +16,29 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
+/**
+ * Reactive filter that intercepts each incoming web request, extracts the JWT token from the Authorization
+ * header, validates it, and sets the reactive security context if the token is valid.
+ */
 @Component
 public class JwtRequestFilter implements WebFilter {
 
     private JwtService jwtService;
 
+    /**
+     * @param jwtService the service used to validate tokens and extract claims
+     */
     public JwtRequestFilter(JwtService jwtService) {
         this.jwtService = jwtService;
     }
 
+    /**
+     * Extracts and validates the JWT token from the request, then populates the reactive security context.
+     *
+     * @param exchange the server web exchange containing the request and response
+     * @param chain    the web filter chain to continue processing
+     * @return a Mono that completes when filtering is done
+     */
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
 
@@ -55,6 +69,12 @@ public class JwtRequestFilter implements WebFilter {
         return chain.filter(exchange);
     }
 
+    /**
+     * Extracts the JWT token from the Authorization header, stripping the Bearer prefix.
+     *
+     * @param request the server HTTP request
+     * @return the JWT token, or null if no valid Authorization header is present
+     */
     public String getToken(ServerHttpRequest request) {
         String authenticationHeader = request.getHeaders().getFirst("Authorization");
 
@@ -67,6 +87,12 @@ public class JwtRequestFilter implements WebFilter {
         return null;
     }
 
+    /**
+     * Extracts the role claim from the JWT claims and converts it to a {@link SimpleGrantedAuthority}.
+     *
+     * @param claims the JWT claims
+     * @return the granted authority with role prefix, or null if no role is present
+     */
     private SimpleGrantedAuthority getRole(Claims claims) {
         String role = claims.get("role", String.class);
         String rolePrefix = "ROLE_";

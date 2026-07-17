@@ -16,18 +16,32 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.List;
-
+/**
+ * Filter that intercepts each incoming HTTP request, extracts the JWT token from the Authorization header,
+ * validates it, and sets the Spring Security authentication context if the token is valid.
+ */
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
 
+    /**
+     * @param jwtService the service used to validate tokens and extract claims
+     */
     public JwtAuthenticationFilter(JwtService jwtService) {
         this.jwtService = jwtService;
     }
 
+    /**
+     * Extracts and validates the JWT token from the request, then populates the security context.
+     *
+     * @param request     the incoming HTTP request
+     * @param response    the HTTP response
+     * @param filterChain the filter chain to continue processing
+     */
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
         String token = getToken(request);
 
@@ -58,6 +72,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
+    /**
+     * Extracts the JWT token from the Authorization header, stripping the Bearer prefix.
+     *
+     * @param request the HTTP request
+     * @return the JWT token, or null if no valid Authorization header is present
+     */
     private String getToken(HttpServletRequest request) {
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
@@ -70,6 +90,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return null;
     }
 
+    /**
+     * Extracts the role claim from the JWT claims and converts it to a {@link SimpleGrantedAuthority}.
+     *
+     * @param claims the JWT claims
+     * @return the granted authority with role prefix, or null if no role is present
+     */
     private SimpleGrantedAuthority getRole(Claims claims) {
         String role = claims.get("role", String.class);
         String rolePrefix = "ROLE_";
