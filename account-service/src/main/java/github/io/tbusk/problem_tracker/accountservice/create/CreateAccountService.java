@@ -3,6 +3,8 @@ package github.io.tbusk.problem_tracker.accountservice.create;
 import github.io.tbusk.problem_tracker.accountservice.create.dtos.CreateRequestDTO;
 import github.io.tbusk.problem_tracker.accountservice.create.dtos.CreateSuccessDTO;
 import github.io.tbusk.problem_tracker.accountservice.create.exceptions.InvalidPasswordException;
+import github.io.tbusk.problem_tracker.accountservice.role.Role;
+import github.io.tbusk.problem_tracker.accountservice.role.RoleRepository;
 import github.io.tbusk.problem_tracker.accountservice.user.User;
 import github.io.tbusk.problem_tracker.accountservice.user.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,11 +16,13 @@ import java.util.Optional;
 public class CreateAccountService {
 
     private UserRepository userRepository;
+    private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
     private PasswordCheckerService passwordCheckerService;
 
-    public CreateAccountService(UserRepository userRepository, PasswordEncoder passwordEncoder, PasswordCheckerService passwordCheckerService) {
+    public CreateAccountService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, PasswordCheckerService passwordCheckerService) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.passwordCheckerService = passwordCheckerService;
     }
@@ -47,7 +51,13 @@ public class CreateAccountService {
 
         String encodedPassword = passwordEncoder.encode(request.password());
 
-        User newUser = new User(request.emailAddress(), encodedPassword);
+        Optional<Role> defaultRole = roleRepository.findByName(Role.DEFAULT_ROLE_NAME);
+
+        if (!defaultRole.isPresent()) {
+            throw new IllegalStateException("Default role not found");
+        }
+
+        User newUser = new User(request.emailAddress(), encodedPassword, defaultRole.get());
 
         userRepository.save(newUser);
 
