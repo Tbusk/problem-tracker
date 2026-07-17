@@ -33,6 +33,7 @@ public class SecurityConfig {
                 .addFilterAt(jwtRequestFilter, SecurityWebFiltersOrder.AUTHENTICATION)
                 .authorizeExchange(auth -> {
                     auth.pathMatchers(HttpMethod.POST, "/api/v1/auth").permitAll();
+                    auth.pathMatchers(HttpMethod.POST, "/account-service/api/v1/create-account").permitAll();
                     auth.anyExchange().authenticated();
                 })
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
