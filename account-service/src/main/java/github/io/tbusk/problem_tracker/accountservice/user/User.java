@@ -1,5 +1,6 @@
 package github.io.tbusk.problem_tracker.accountservice.user;
 
+import github.io.tbusk.problem_tracker.accountservice.role.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -61,9 +62,17 @@ public class User {
     @NotNull
     private Boolean locked;
 
-    public User(String emailAddress, String passwordHash) {
+    /**
+     * The role of the user, e.g., ADMIN
+     */
+    @ManyToOne
+    @JoinColumn(name = "ROLE_ID", nullable = false)
+    private Role role;
+
+    public User(String emailAddress, String passwordHash, Role role) {
         this.emailAddress = emailAddress;
         this.passwordHash = passwordHash;
+        this.role = role;
         locked = false;
         enabled = true;
         createdOn = LocalDateTime.now();
@@ -170,5 +179,22 @@ public class User {
      */
     public void setLocked(Boolean locked) {
         this.locked = locked;
+    }
+
+    /**
+     * Gets the role of the user, e.g., ADMIN
+     *
+     * @return the role
+     */
+    public Role getRole() {
+        return role;
+    }
+
+    /**
+     * Updates the role of the user
+     * @param role the new role
+     */
+    public void setRole(Role role) {
+        this.role = role;
     }
 }
