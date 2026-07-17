@@ -1,0 +1,56 @@
+package github.io.tbusk.problem_tracker.accountservice.create;
+
+import github.io.tbusk.problem_tracker.accountservice.create.dtos.CreateRequestDTO;
+import github.io.tbusk.problem_tracker.accountservice.create.dtos.CreateSuccessDTO;
+import github.io.tbusk.problem_tracker.accountservice.create.exceptions.InvalidPasswordException;
+import github.io.tbusk.problem_tracker.accountservice.user.User;
+import github.io.tbusk.problem_tracker.accountservice.user.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+public class CreateAccountService {
+
+    private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
+    private PasswordCheckerService passwordCheckerService;
+
+    public CreateAccountService(UserRepository userRepository, PasswordEncoder passwordEncoder, PasswordCheckerService passwordCheckerService) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.passwordCheckerService = passwordCheckerService;
+    }
+
+    public CreateSuccessDTO create(CreateRequestDTO request) throws InvalidPasswordException {
+
+        if (request == null) {
+            throw new IllegalArgumentException("Request body cannot be null");
+        }
+
+        if (request.emailAddress() == null) {
+            throw new IllegalArgumentException("Please supply an email address");
+        }
+
+        if (request.password() == null) {
+            throw new IllegalArgumentException("Please supply a password");
+        }
+
+        Optional<User> existingUser = userRepository.findByEmailAddress(request.emailAddress());
+
+        if (existingUser.isPresent()) {
+            throw new IllegalArgumentException("It looks like this email address is already in use. Please log in instead.");
+        }
+
+        passwordCheckerService.isValidPassword(request.password());
+
+        String encodedPassword = passwordEncoder.encode(request.password());
+
+        User newUser = new User(request.emailAddress(), encodedPassword);
+
+        userRepository.save(newUser);
+
+        return new CreateSuccessDTO("Account successfully created! Please log in.");
+    }
+}

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  * programming problem tracker, e.g., email address and password.
  */
 @Entity
-@Table(name = "USER")
+@Table(name = "\"USER\"")
 public class User {
 
     /**
@@ -60,6 +60,18 @@ public class User {
     @Column(name = "LOCKED", nullable = false)
     @NotNull
     private Boolean locked;
+
+    public User(String emailAddress, String passwordHash) {
+        this.emailAddress = emailAddress;
+        this.passwordHash = passwordHash;
+        locked = false;
+        enabled = true;
+        createdOn = LocalDateTime.now();
+    }
+
+    public User() {
+
+    }
 
     /**
      * Gets the user id

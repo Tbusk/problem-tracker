@@ -3,6 +3,8 @@ package github.io.tbusk.problem_tracker.accountservice.user;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * Repository for interacting with user account data from the database.
  */
@@ -17,6 +19,6 @@ public interface UserRepository extends PagingAndSortingRepository <User, Long> 
      */
     User save(User user);
 
-    User findByEmailAddress(String emailAddress);
+    Optional<User> findByEmailAddress(String emailAddress);
 
 }
