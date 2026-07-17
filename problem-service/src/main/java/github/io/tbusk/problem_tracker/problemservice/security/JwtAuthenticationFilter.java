@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.core.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -33,9 +34,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (token != null && jwtService.validateToken(token)) {
             Claims claims = jwtService.getClaims(token);
 
+            if (claims == null) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
             String emailAddress = claims.getSubject();
 
-            Authentication authentication = new UsernamePasswordAuthenticationToken(emailAddress, null, List.of());
+            if (emailAddress == null) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+            SimpleGrantedAuthority role = getRole(claims);
+
+            List<SimpleGrantedAuthority> authorities = role != null ? List.of(role) : List.of();
+
+            Authentication authentication = new UsernamePasswordAuthenticationToken(emailAddress, null, authorities);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
@@ -53,5 +68,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         return null;
+    }
+
+    private SimpleGrantedAuthority getRole(Claims claims) {
+        String role = claims.get("role", String.class);
+        String rolePrefix = "ROLE_";
+
+        if (role == null) {
+            return null;
+        }
+
+        return new SimpleGrantedAuthority(rolePrefix + role);
     }
 }
