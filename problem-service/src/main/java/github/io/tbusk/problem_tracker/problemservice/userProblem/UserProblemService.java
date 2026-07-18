@@ -6,12 +6,12 @@ import github.io.tbusk.problem_tracker.problemservice.problem.database.ProblemRe
 import github.io.tbusk.problem_tracker.problemservice.problem.exceptions.ProblemNotFoundException;
 import github.io.tbusk.problem_tracker.problemservice.problem.sanitizers.ProblemSanitizer;
 import github.io.tbusk.problem_tracker.problemservice.programmingLanguage.ProgrammingLanguage;
-import github.io.tbusk.problem_tracker.problemservice.programmingLanguage.ProgrammingLanguageNotFoundException;
 import github.io.tbusk.problem_tracker.problemservice.programmingLanguage.ProgrammingLanguageRepository;
+import github.io.tbusk.problem_tracker.problemservice.programmingLanguage.exceptions.ProgrammingLanguageNotFoundException;
 import github.io.tbusk.problem_tracker.problemservice.response.SuccessResponseDTO;
 import github.io.tbusk.problem_tracker.problemservice.user.User;
-import github.io.tbusk.problem_tracker.problemservice.user.UserNotFoundException;
 import github.io.tbusk.problem_tracker.problemservice.user.UserRepository;
+import github.io.tbusk.problem_tracker.problemservice.user.exceptions.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

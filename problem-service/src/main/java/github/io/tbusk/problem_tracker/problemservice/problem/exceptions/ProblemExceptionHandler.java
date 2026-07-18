@@ -44,4 +44,15 @@ public class ProblemExceptionHandler {
     private ErrorResponseDTO handleProblemUrlValidationException(ProblemUrlValidationException ex) {
         return new ErrorResponseDTO(ex.getMessage());
     }
+
+    /**
+     * Handles exceptions related to the problem not being found.
+     * @param ex the exception
+     * @return error response DTO
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ProblemNotFoundException.class)
+    private ErrorResponseDTO handleProblemNotFoundException(ProblemNotFoundException ex) {
+        return new ErrorResponseDTO(ex.getMessage());
+    }
 }
