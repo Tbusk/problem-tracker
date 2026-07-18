@@ -1,6 +1,6 @@
-# Problem Service
+# Account Service
 
-This is a Spring Boot microservice that provides the competitive programming problem functionality in the problem
+This is a Spring Boot microservice that provides the competitive programming account functionality in the problem
 tracker application.
 
 ## Tech Stack
@@ -28,21 +28,18 @@ tracker application.
 
 ### Testing
 
-- JUnit 5
+- JUnit 5 [Planned]
 - Mockito [Planned]
 
 ## Current Features
 
-- Add a problem and its categories
-- View a problem
+- Create an account
 - JWT Authentication
 
 ## Potential Features
 
-- View a problem and its categories
-- Search for problems with a given category
-- Search for problems with a given difficulty
-- Record a user solving a problem
-- View a user's solved problems
-- View stats for a user on a problem
-- View stats for a user on all problems
+- View existing accounts (Paginated)
+- Enable / Disable account
+- Lock / Unlock account
+- Update password
+- Update email address

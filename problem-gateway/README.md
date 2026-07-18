@@ -1,7 +1,7 @@
-# Problem Service
+# Problem Gateway
 
-This is a Spring Boot microservice that provides the competitive programming problem functionality in the problem
-tracker application.
+This is a Spring Boot API gateway for all the microservices in the problem tracker application, which handles JWT
+authentication and routing in addition to functionality like rate limiting and circuit breaking (adding later).
 
 ## Tech Stack
 
@@ -9,6 +9,7 @@ tracker application.
 - Spring Boot
 - Spring Data JPA (Hibernate)
 - Spring Security
+- Spring Cloud Gateway Server
 - Spring Cloud Config Client
 - Spring Cloud Netflix Eureka Client
 - Hibernate Validator
@@ -28,21 +29,19 @@ tracker application.
 
 ### Testing
 
-- JUnit 5
+- JUnit 5 [Planned]
 - Mockito [Planned]
 
 ## Current Features
 
-- Add a problem and its categories
-- View a problem
 - JWT Authentication
+- Routing through service discovery and client-side load balancing
 
 ## Potential Features
 
-- View a problem and its categories
-- Search for problems with a given category
-- Search for problems with a given difficulty
-- Record a user solving a problem
-- View a user's solved problems
-- View stats for a user on a problem
-- View stats for a user on all problems
+- Rate limiting
+- Circuit breaking
+- Retries
+- Bulkhead pattern
+- Fallback processing
+- Logging
