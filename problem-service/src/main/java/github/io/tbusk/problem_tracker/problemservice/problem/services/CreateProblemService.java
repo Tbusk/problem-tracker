@@ -39,6 +39,7 @@ public class CreateProblemService {
      * @param problemRepository    repository for persisting problems
      * @param difficultyRepository repository for resolving difficulty levels
      * @param platformRepository   repository for resolving platforms
+     * @param problemCategoryService service for managing problem categories
      */
     public CreateProblemService(ProblemRepository problemRepository, DifficultyRepository difficultyRepository, PlatformRepository platformRepository, ProblemCategoryService problemCategoryService) {
         this.problemRepository = problemRepository;
@@ -100,7 +101,7 @@ public class CreateProblemService {
         Optional<Platform> platform = platformRepository.findByName(createRequest.platformName().trim());
 
         if (!platform.isPresent()) {
-            throw new PlatformNotFoundException(createRequest.platformName());
+            throw new PlatformNotFoundException();
         }
 
         problem.setPlatform(platform.get());

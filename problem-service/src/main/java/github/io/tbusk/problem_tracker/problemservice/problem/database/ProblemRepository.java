@@ -32,4 +32,14 @@ public interface ProblemRepository extends PagingAndSortingRepository<Problem, I
      */
     @Query("select p from Problem p where p.name = :name and p.difficulty.name = :difficulty and p.platform.name = :platform limit 1")
     Optional<Problem> findByDetails(String name, String difficulty, String platform);
+
+    /**
+     * Finds a problem by its name and platform
+     *
+     * @param name the name of the problem
+     * @param platform the platform the problem is from
+     * @return an Optional containing the problem if found, otherwise empty
+     */
+    @Query("select p from Problem p where lower(p.name) = lower(:name) and lower(p.platform.name) = lower(:platform) limit 1")
+    Optional<Problem> findByNameAndPlatform(String name, String platform);
 }

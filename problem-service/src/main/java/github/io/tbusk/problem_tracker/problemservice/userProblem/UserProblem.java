@@ -63,6 +63,30 @@ public class UserProblem {
     private ProgrammingLanguage programmingLanguage;
 
     /**
+     * Constructs a new UserProblem instance representing when a user solved a competitive programming
+     * problem, the programming language used, and the time taken.
+     *
+     * @param programmingLanguage the programming language used to solve the problem
+     * @param minutes the number of minutes taken to solve the problem
+     * @param problem the competitive programming problem that was solved
+     * @param user the user who solved the problem
+     */
+    public UserProblem(ProgrammingLanguage programmingLanguage, Float minutes, Problem problem, User user) {
+        this.programmingLanguage = programmingLanguage;
+        this.minutes = minutes;
+        this.problem = problem;
+        this.user = user;
+        solvedOn = LocalDateTime.now();
+    }
+
+    /**
+     * Constructs a new UserProblem instance with default values.
+     */
+    public UserProblem() {
+
+    }
+
+    /**
      * Gets the user problem record id
      *
      * @return the user problem record id

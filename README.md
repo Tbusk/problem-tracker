@@ -90,7 +90,6 @@ To get started:
 - [ ] Add advice to possible thrown exceptions in each service
 - [ ] Move authentication from gateway to a new authentication microservice
 - [ ] Finish implementing and setting up the authentication microservice
-- [ ] Get user problem adding set up
 - [ ] Get user problem fetching set up
 - [ ] Test existing functionality more
 - [ ] Expand problem service functionality

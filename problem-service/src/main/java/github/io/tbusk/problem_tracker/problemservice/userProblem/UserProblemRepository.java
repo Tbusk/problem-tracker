@@ -19,4 +19,11 @@ public interface UserProblemRepository extends PagingAndSortingRepository<UserPr
      */
     Collection<UserProblem> findAll();
 
+    /**
+     * Saves a user problem record to the database, creating a new or updating an existing record
+     *
+     * @param userProblem the user problem to save
+     * @return the saved user problem record
+     */
+    UserProblem save(UserProblem userProblem);
 }

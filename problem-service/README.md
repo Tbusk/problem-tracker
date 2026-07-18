@@ -36,13 +36,13 @@ tracker application.
 - Add a problem and its categories
 - View a problem
 - JWT Authentication
+- Record a user solving a problem
 
 ## Potential Features
 
 - View a problem and its categories
 - Search for problems with a given category
 - Search for problems with a given difficulty
-- Record a user solving a problem
 - View a user's solved problems
 - View stats for a user on a problem
 - View stats for a user on all problems

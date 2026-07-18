@@ -8,10 +8,8 @@ import github.io.tbusk.problem_tracker.problemservice.exception.ProblemServiceEx
 public class PlatformNotFoundException extends ProblemServiceException {
     /**
      * Creates an exception with a message indicating the platform is not valid
-     *
-     * @param platform the invalid platform name provided
      */
-    public PlatformNotFoundException(String platform) {
-        super(String.format("'%s' is not a valid platform.", platform));
+    public PlatformNotFoundException() {
+        super("Cannot find the platform. Please check again.");
     }
 }
