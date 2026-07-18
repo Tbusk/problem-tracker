@@ -10,7 +10,7 @@ RUN ./gradlew bootJar -x test --no-daemon
 # Stage 2: Run
 FROM eclipse-temurin:21-jre-alpine
 
-ENV PORT=8080
+ENV PORT=8081
 ENV SPRING_PROFILE="dev-docker"
 ARG VERSION="0.1.0"
 ARG NAME="account-service"
@@ -19,14 +19,17 @@ ARG NAME="account-service"
 LABEL maintainer="Trevor Busk <trevor@tbusk.com>"
 
 # Set up group and user
-RUN addgroup -S account-service && \
-    adduser -S -G account-service service-user
+RUN addgroup -S application && \
+    adduser -S -G application user
 
 # Copy files over while updating permissions and group
-COPY --chown=service-user:account-service --from=build /app/build/libs/${NAME}-${VERSION}.jar app.jar
+COPY --chown=user:application --from=build /app/build/libs/${NAME}-${VERSION}.jar app.jar
+
+# Get Curl for healthchecks
+RUN apk add --no-cache curl
 
 # Switch from Root to User
-USER service-user
+USER user
 
 EXPOSE ${PORT}
 

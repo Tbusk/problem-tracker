@@ -10,10 +10,10 @@ RUN ./gradlew bootJar -x test --no-daemon
 # Stage 2: Run
 FROM eclipse-temurin:21-jre-alpine
 
-ENV PORT=8080
-ENV SPRING_PROFILE="dev-docker"
+ENV PORT=8071
+ENV SPRING_PROFILE="native"
 ARG VERSION="0.1.0"
-ARG NAME="problem-service"
+ARG NAME="config-server"
 
 # Add Metadata
 LABEL maintainer="Trevor Busk <trevor@tbusk.com>"
