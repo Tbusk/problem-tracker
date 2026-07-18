@@ -1,6 +1,82 @@
 name: problem-tracker-dev
 
 services:
+
+  problem-gateway:
+    container_name: problem-gateway
+    build:
+      context: ../problem-gateway
+      dockerfile: Dockerfile
+      no_cache: true
+      args:
+        - VERSION=0.1.0
+        - NAME=problem-gateway
+    restart: unless-stopped
+    environment:
+      - PORT=8072
+      - CONFIG_HOST=config-server
+    ports:
+      - "8072:8072"
+    depends_on:
+      config-server:
+        condition: service_healthy
+      service-discovery:
+        condition: service_healthy
+      database:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://problem-gateway:8072/actuator/health"]
+      retries: 5
+      interval: 10s
+      start_period: 120s
+      timeout: 10s
+
+  config-server:
+    container_name: config-server
+    build:
+      context: ../config-server
+      dockerfile: Dockerfile
+      no_cache: true
+      args:
+        - VERSION=0.1.0
+        - NAME=config-server
+    restart: unless-stopped
+    environment:
+      - PORT=8071
+    ports:
+      - "8071"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://config-server:8071/actuator/health" ]
+      retries: 5
+      start_period: 30s
+      interval: 10s
+      timeout: 10s
+
+  service-discovery:
+    container_name: service-discovery
+    build:
+      context: ../service-discovery
+      dockerfile: Dockerfile
+      no_cache: true
+      args:
+        - VERSION=0.1.0
+        - NAME=service-discovery
+    restart: unless-stopped
+    environment:
+      - PORT=8070
+      - CONFIG_HOST=config-server
+    ports:
+      - "8070"
+    depends_on:
+      config-server:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://service-discovery:8070/actuator/health" ]
+      retries: 5
+      start_period: 30s
+      interval: 10s
+      timeout: 10s
+
   database:
     container_name: oracledb
     image: container-registry.oracle.com/database/free:latest
@@ -10,21 +86,66 @@ services:
       - ORACLE_PWD=Abc1234
     volumes:
       - oracledb:/opt/oracle/oradata
+    healthcheck:
+      test: [ "CMD", "/opt/oracle/checkDBStatus.sh" ]
+      retries: 10
+      start_period: 120s
+      interval: 10s
+      timeout: 10s
 
   problem-service:
     container_name: problem-service
     build:
       context: ../problem-service
       dockerfile: Dockerfile
+      no_cache: true
       args:
         - VERSION=0.1.0
         - NAME=problem-service
     restart: unless-stopped
     environment:
       - PORT=8080
+      - CONFIG_HOST=config-server
     ports:
-      - "8080:8080"
+      - "8080"
     depends_on:
-      - database
+      database:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://problem-service:8080/actuator/health" ]
+      retries: 5
+      start_period: 120s
+      interval: 10s
+      timeout: 10s
+
+  account-service:
+    container_name: account-service
+    build:
+      context: ../account-service
+      dockerfile: Dockerfile
+      no_cache: true
+      args:
+        - VERSION=0.1.0
+        - NAME=account-service
+    restart: unless-stopped
+    environment:
+      - PORT=8081
+      - CONFIG_HOST=config-server
+    ports:
+      - "8081"
+    depends_on:
+      database:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://account-service:8081/actuator/health" ]
+      retries: 5
+      start_period: 120s
+      interval: 10s
+      timeout: 10s
+
 volumes:
   oracledb:

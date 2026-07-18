@@ -1,8 +1,9 @@
 # Problem Tracker
 
-This is a sample competitive programming and interview problem utility microservices monorepo allowing users to keep track of problems
-they have solved, what platform, what language, how quick, when, how often, and to get notifications of what they should
-work on, their activity (daily, weekly, monthly, yearly, etc.), and anything else that comes to mind when building it.
+This is a sample competitive programming and interview problem utility microservices monorepo allowing users to keep
+track of problems they have solved, what platform, what language, how quick, when, how often, and to get notifications
+of what they should work on, their activity (daily, weekly, monthly, yearly, etc.), and anything else that comes to mind
+when building it.
 
 ## Setup
 
@@ -60,23 +61,35 @@ This database is responsible for storing data related to problems, users, and us
 To get started:
 
 1. Clone the repository.
-2. Run the docker compose file found in [development](development/docker-compose.yaml) via `docker compose up -d` when
-   in that directory.
-3. Navigate to [development/oracle_db](development/oracle_db), read the README, navigate
+2. Navigate to [development](development)
+3. Run `docker compose up -d database` to bootstrap the database
+4. Navigate to [development/oracle_db](development/oracle_db), read the README, follow any instructions, navigate
    to [development/oracle_db/schema](development/oracle_db/schema) and run the SQL scripts to set up the database
-   schema.
-4. Head to [config server](config-server), start it, and review the configuration files and adjustdock as needed in
+   schema, paying attention to ordering.
+
+### Development with Docker
+
+To get started:
+
+1. Run `docker compose up -d` to get the remaining services up
+
+### Development
+
+To get started:
+
+1. Head to [config server](config-server), start it, and review the configuration files and adjustdock as needed in
    the [resources/config](config-server/src/main/resources/config) directory.
-5. Head to [service-discovery](service-discovery) and start it.
-6. Head to [problem-gateway](problem-gateway) and start it. Send your requests through this with the service name as a
+2. Head to [service-discovery](service-discovery) and start it.
+3. Head to [problem-gateway](problem-gateway) and start it. Send your requests through this with the service name as a
    prefix.
-7. Head to each of the microservices ([problem-service](problem-service), [account-service](account-service)) and start
+4. Head to each of the microservices ([problem-service](problem-service), [account-service](account-service)) and start
    them.
 
 ## Agenda
 
-- [ ] Add dockerfiles to all sub projects
-- [ ] Update the docker compose with the servers and microservices
+- [ ] Add advice to possible thrown exceptions in each service
+- [ ] Move authentication from gateway to a new authentication microservice
+- [ ] Finish implementing and setting up the authentication microservice
 - [ ] Get user problem adding set up
 - [ ] Get user problem fetching set up
 - [ ] Test existing functionality more

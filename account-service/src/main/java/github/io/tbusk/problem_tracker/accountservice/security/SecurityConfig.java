@@ -44,6 +44,7 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers(HttpMethod.POST, "/api/v1/create-account").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/actuator/health").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .build();

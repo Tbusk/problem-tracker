@@ -43,6 +43,9 @@ public class SecurityConfig {
                 .authorizeExchange(auth -> {
                     auth.pathMatchers(HttpMethod.POST, "/api/v1/auth").permitAll();
                     auth.pathMatchers(HttpMethod.POST, "/account-service/api/v1/create-account").permitAll();
+                    auth.pathMatchers(HttpMethod.GET, "/account-service/actuator/health").permitAll();
+                    auth.pathMatchers(HttpMethod.GET, "/problem-service/actuator/health").permitAll();
+                    auth.pathMatchers(HttpMethod.GET, "/actuator/health").permitAll();
                     auth.anyExchange().authenticated();
                 })
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)

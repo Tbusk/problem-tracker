@@ -1,6 +1,6 @@
 # Oracle Database
 
-This database is used to store the problem data.
+This database is used to store the problem, user, and user activity data.
 
 The [schema](schema) directory contains all of the SQL scripts and backup files for the database.
 
