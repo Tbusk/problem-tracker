@@ -2,22 +2,37 @@
 
 This database is used to store the problem, user, and user activity data.
 
-The [schema](schema) directory contains all of the SQL scripts and backup files for the database.
+The [schema](sql) directory contains all of the SQL scripts and backup files for the database.
 
-In order to fully set it up yourself, you will need to create a user like I did (`PROBLEM_TRACKER`), grant it necessary
-privileges, and then change to that schema.
+The database will load the scripts automatically.
 
-After you do that, you can run the SQL scripts in the [schema](schema) directory to set up the database.
+Two accounts will be created:
 
-To connect to the database (if you are unfamiliar with Oracle DB), use the following properties:
+- `PROBLEM_TRACKER` to manage the problem tracker schema
+- `PROBLEM_TRACKER_APP` to run the app with, with reduced permissions
+
+To connect to the root account:
 
 - Host : `localhost`
+- Connection Type: `Service Name`
 - Service : `FREEPDB1`
 - Port : `1521`
 - Driver : `Thin`
 - Authentication: `SYSDBA`
 - User : `SYS`
-- Password : your password
+- Password : your password from the docker-compose.yaml file environment variable `ORACLE_PWD` in [docker-compose.yaml](../docker-compose.yaml)
+- URL : `jdbc:oracle:thin:@//localhost:1521/FREEPDB1`
+
+To connect to and manage the problem tracker database:
+
+- Host : `localhost`
+- Connection Type: `Service Name`
+- Service : `FREEPDB1`
+- Port : `1521`
+- Driver : `Thin`
+- Authentication: `User & password`
+- User : `PROBLEM_TRACKER`
+- Password : password found in [01-CRATE_MAIN_USER.sql](sql/01-CREATE_MAIN_USER.sql)
 - URL : `jdbc:oracle:thin:@//localhost:1521/FREEPDB1`
 
 One thing to note is your client may connect you by default with transaction mode of manual, meaning all transactions

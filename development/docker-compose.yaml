@@ -84,9 +84,13 @@ services:
     ports:
       - "1521:1521"
     environment:
-      - ORACLE_PWD=Abc1234
+      - ORACLE_PDB=FREEPDB1
+      - ORACLE_PWD=Abc!1234
+      # https://github.com/oracle/docker-images/blob/main/OracleDatabase/SingleInstance/FAQ.md#how-do-i-change-the-timezone-of-my-container
+      - TZ=UTC
     volumes:
       - oracledb:/opt/oracle/oradata
+      - ./oracle_db/sql:/opt/oracle/scripts/startup
     healthcheck:
       test: [ "CMD", "/opt/oracle/checkDBStatus.sh" ]
       retries: 10
