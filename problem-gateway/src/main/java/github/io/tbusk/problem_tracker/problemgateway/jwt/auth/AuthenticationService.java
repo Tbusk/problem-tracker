@@ -95,7 +95,7 @@ public class AuthenticationService {
             throw new IllegalArgumentException("The email address supplied is not valid");
         }
 
-        if (!emailAddress.matches("^([a-zA-Z0-9]+(.?[a-zA-Z0-9]+)+)@[a-zA-Z0-9]+(.?[a-zA-Z0-9]+)+$")) {
+        if (!emailAddress.matches("^[a-zA-Z0-9]+(\\.?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)+$")) {
             throw new IllegalArgumentException("The email address supplied is not valid");
         }
 
