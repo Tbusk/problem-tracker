@@ -4,7 +4,8 @@ import github.io.tbusk.problem_tracker.problemservice.role.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Generated;
+import org.hibernate.generator.EventType;
 
 import java.time.LocalDateTime;
 
@@ -35,9 +36,8 @@ public class User {
     /**
      * The timestamp of when the user account was created
      */
-    @Column(name = "CREATED_ON", nullable = false)
-    @NotNull
-    @CreationTimestamp
+    @Column(name = "CREATED_ON", insertable = false, updatable = false, nullable = false)
+    @Generated(event = EventType.INSERT)
     private LocalDateTime createdOn;
 
     /**

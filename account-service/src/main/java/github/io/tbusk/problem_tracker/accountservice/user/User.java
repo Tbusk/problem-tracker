@@ -4,7 +4,8 @@ import github.io.tbusk.problem_tracker.accountservice.role.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Generated;
+import org.hibernate.generator.EventType;
 
 import java.time.LocalDateTime;
 
@@ -35,9 +36,8 @@ public class User {
     /**
      * The timestamp of when the user account was created
      */
-    @Column(name = "CREATED_ON", nullable = false)
-    @NotNull
-    @CreationTimestamp
+    @Column(name = "CREATED_ON", insertable = false, updatable = false, nullable = false)
+    @Generated(event = EventType.INSERT)
     private LocalDateTime createdOn;
 
     /**
@@ -69,15 +69,26 @@ public class User {
     @JoinColumn(name = "ROLE_ID", nullable = false)
     private Role role;
 
+
+    /**
+     * Constructs a new user with the specified email address, password hash, and role.
+     * The account is initialized as enabled, unlocked, and created with the current timestamp in UTC.
+     *
+     * @param emailAddress the email address of the user, e.g., example@email.com
+     * @param passwordHash the hashed password for the user account
+     * @param role         the role of the user, e.g., ADMIN
+     */
     public User(String emailAddress, String passwordHash, Role role) {
         this.emailAddress = emailAddress;
         this.passwordHash = passwordHash;
         this.role = role;
         locked = false;
         enabled = true;
-        createdOn = LocalDateTime.now();
     }
 
+    /**
+     * Default constructor required by JPA for entity instantiation.
+     */
     public User() {
 
     }
