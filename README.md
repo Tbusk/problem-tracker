@@ -62,10 +62,8 @@ To get started:
 
 1. Clone the repository.
 2. Navigate to [development](development)
-3. Run `docker compose up -d database` to bootstrap the database
-4. Navigate to [development/oracle_db](development/oracle_db), read the README, follow any instructions, navigate
-   to [development/oracle_db/schema](development/oracle_db/schema) and run the SQL scripts to set up the database
-   schema, paying attention to ordering.
+3. Run `docker compose up -d database` to bootstrap the database. The database will be set up automatically, and be
+   ready to use in less than a minute.
 
 ### Development with Docker
 
