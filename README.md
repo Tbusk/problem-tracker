@@ -85,7 +85,6 @@ To get started:
 
 ## Agenda
 
-- [ ] Add advice to possible thrown exceptions in each service
 - [ ] Move authentication from gateway to a new authentication microservice
 - [ ] Finish implementing and setting up the authentication microservice
 - [ ] Get user problem fetching set up
