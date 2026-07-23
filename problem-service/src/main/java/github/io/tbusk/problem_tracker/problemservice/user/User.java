@@ -2,6 +2,7 @@ package github.io.tbusk.problem_tracker.problemservice.user;
 
 import github.io.tbusk.problem_tracker.problemservice.role.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.Generated;
@@ -31,6 +32,7 @@ public class User {
     @Column(name = "EMAIL_ADDRESS", nullable = false, unique = true)
     @Size(min = 5, max = 255)
     @NotNull
+    @Email
     private String emailAddress;
 
     /**
