@@ -1,5 +1,6 @@
 package github.io.tbusk.problem_tracker.accountservice.user;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,13 +19,14 @@ public interface UserRepository extends PagingAndSortingRepository <User, Long> 
      * @return the saved user
      */
     User save(User user);
-    
+
     /**
      * Finds a user by their email address.
      *
      * @param emailAddress the email address to search for
      * @return an {@link Optional} containing the user if found, or an empty {@link Optional} otherwise
      */
+    @Query("select u from User u where lower(u.emailAddress) = lower(:emailAddress)")
     Optional<User> findByEmailAddress(String emailAddress);
 
 }
