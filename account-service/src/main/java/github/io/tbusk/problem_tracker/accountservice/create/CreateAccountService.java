@@ -3,6 +3,10 @@ package github.io.tbusk.problem_tracker.accountservice.create;
 import github.io.tbusk.problem_tracker.accountservice.create.dtos.CreateRequestDTO;
 import github.io.tbusk.problem_tracker.accountservice.create.dtos.CreateSuccessDTO;
 import github.io.tbusk.problem_tracker.accountservice.create.exceptions.InvalidPasswordException;
+import github.io.tbusk.problem_tracker.accountservice.exceptions.AccountServiceException;
+import github.io.tbusk.problem_tracker.accountservice.create.exceptions.EmailAddressInUseException;
+import github.io.tbusk.problem_tracker.accountservice.exceptions.InvalidEmailException;
+import github.io.tbusk.problem_tracker.accountservice.exceptions.StateException;
 import github.io.tbusk.problem_tracker.accountservice.role.Role;
 import github.io.tbusk.problem_tracker.accountservice.role.RoleRepository;
 import github.io.tbusk.problem_tracker.accountservice.user.User;
@@ -46,16 +50,23 @@ public class CreateAccountService {
      * @param request the DTO containing the user's email address and password
      * @return a success response indicating the account was created
      * @throws InvalidPasswordException if the supplied password does not meet requirements
-     * @throws IllegalArgumentException if any required field is null or the email address is already in use
+     * @throws IllegalArgumentException if any required field is null
+     * @throws InvalidEmailException if the email address is not in a valid format
+     * @throws EmailAddressInUseException if the email address is already associated with an existing account
+     * @throws StateException if the default role is not found
      */
-    public CreateSuccessDTO create(CreateRequestDTO request) throws InvalidPasswordException {
+    public CreateSuccessDTO create(CreateRequestDTO request) throws AccountServiceException {
 
         if (request == null) {
-            throw new IllegalArgumentException("Request body cannot be null");
+            throw new IllegalArgumentException("Request body cannot be empty");
         }
 
         if (request.emailAddress() == null) {
             throw new IllegalArgumentException("Please supply an email address");
+        }
+
+        if (!request.emailAddress().matches("^[a-zA-Z0-9]+(\\.?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(\\.[a-zA-Z0-9]{2,})+$")) {
+            throw new InvalidEmailException();
         }
 
         if (request.password() == null) {
@@ -65,7 +76,7 @@ public class CreateAccountService {
         Optional<User> existingUser = userRepository.findByEmailAddress(request.emailAddress());
 
         if (existingUser.isPresent()) {
-            throw new IllegalArgumentException("It looks like this email address is already in use. Please log in instead.");
+            throw new EmailAddressInUseException();
         }
 
         passwordCheckerService.isValidPassword(request.password());
@@ -75,7 +86,7 @@ public class CreateAccountService {
         Optional<Role> defaultRole = roleRepository.findByName(Role.DEFAULT_ROLE_NAME);
 
         if (!defaultRole.isPresent()) {
-            throw new IllegalStateException("Default role not found");
+            throw new StateException("Default role was not found when it is expected.");
         }
 
         User newUser = new User(request.emailAddress(), encodedPassword, defaultRole.get());
