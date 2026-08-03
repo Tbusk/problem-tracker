@@ -12,7 +12,8 @@ import org.springframework.security.web.server.context.NoOpServerSecurityContext
 /**
  * Configures Spring Security for the API gateway.
  * Disables CSRF, basic auth, and form login, adds JWT authentication filtering, and permits
- * unauthenticated access to authentication and account creation endpoints.
+ * unauthenticated access to authentication and account creation endpoints. Every endpoint has an
+ * explicit authorization rule, and any request without a matching rule is denied by default.
  */
 @EnableWebFluxSecurity
 @Configuration
@@ -45,7 +46,10 @@ public class SecurityConfig {
                     auth.pathMatchers(HttpMethod.GET, "/account-service/actuator/health").permitAll();
                     auth.pathMatchers(HttpMethod.GET, "/problem-service/actuator/health").permitAll();
                     auth.pathMatchers(HttpMethod.GET, "/actuator/health").permitAll();
-                    auth.anyExchange().authenticated();
+                    auth.pathMatchers(HttpMethod.POST, "/problem-service/api/v1/problem").authenticated();
+                    auth.pathMatchers(HttpMethod.GET, "/problem-service/api/v1/problem/all").authenticated();
+                    auth.pathMatchers(HttpMethod.POST, "/problem-service/api/v1/user-problem").authenticated();
+                    auth.anyExchange().denyAll();
                 })
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)

@@ -12,7 +12,8 @@ import org.springframework.security.web.SecurityFilterChain;
 /**
  * Configures Spring Security for the authentication service.
  * Disables CSRF, basic auth, and form login, uses stateless sessions, and permits
- * unauthenticated access to the token creation and health endpoints.
+ * unauthenticated access to the token creation and health endpoints. Every endpoint has an
+ * explicit authorization rule, and any request without a matching rule is denied by default.
  */
 @EnableWebSecurity
 @Configuration
@@ -34,7 +35,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers(HttpMethod.POST, "/api/v1/auth").permitAll();
                     auth.requestMatchers(HttpMethod.GET, "/actuator/health").permitAll();
-                    auth.anyRequest().authenticated();
+                    auth.anyRequest().denyAll();
                 })
                 .build();
     }

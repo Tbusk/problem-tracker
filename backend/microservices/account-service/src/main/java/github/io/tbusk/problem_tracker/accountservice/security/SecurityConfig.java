@@ -13,7 +13,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 /**
  * Configures Spring Security for the account service.
  * Disables basic auth, form login, and CSRF, enforces stateless sessions, permits unauthenticated
- * access to account creation, and adds JWT authentication filtering for all other requests.
+ * access to account creation, and adds JWT authentication filtering for all other requests. Every
+ * endpoint has an explicit authorization rule, and any request without a matching rule is denied
+ * by default.
  */
 @EnableWebSecurity
 @Configuration
@@ -45,7 +47,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers(HttpMethod.POST, "/api/v1/create-account").permitAll();
                     auth.requestMatchers(HttpMethod.GET, "/actuator/health").permitAll();
-                    auth.anyRequest().authenticated();
+                    auth.anyRequest().denyAll();
                 })
                 .build();
     }

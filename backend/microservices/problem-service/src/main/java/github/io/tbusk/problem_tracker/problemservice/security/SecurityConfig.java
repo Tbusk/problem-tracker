@@ -13,7 +13,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 /**
  * Configures Spring Security for the problem service.
  * Disables basic auth, form login, and CSRF, enforces stateless sessions, and adds JWT authentication
- * filtering before the standard username/password filter.
+ * filtering before the standard username/password filter. Every endpoint has an explicit authorization
+ * rule, and any request without a matching rule is denied by default.
  */
 @EnableWebSecurity
 @Configuration
@@ -43,8 +44,11 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers(HttpMethod.POST, "/api/v1/problem").authenticated();
+                    auth.requestMatchers(HttpMethod.GET, "/api/v1/problem/all").authenticated();
+                    auth.requestMatchers(HttpMethod.POST, "/api/v1/user-problem").authenticated();
                     auth.requestMatchers(HttpMethod.GET, "/actuator/health").permitAll();
-                    auth.anyRequest().authenticated();
+                    auth.anyRequest().denyAll();
                 })
                 .build();
     }
