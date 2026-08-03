@@ -49,6 +49,7 @@ public class SecurityConfig {
                     auth.pathMatchers(HttpMethod.POST, "/problem-service/api/v1/problem").authenticated();
                     auth.pathMatchers(HttpMethod.GET, "/problem-service/api/v1/problem/all").authenticated();
                     auth.pathMatchers(HttpMethod.POST, "/problem-service/api/v1/user-problem").authenticated();
+                    auth.pathMatchers(HttpMethod.GET, "/reporting-service/actuator/health").permitAll();
                     auth.anyExchange().denyAll();
                 })
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)

@@ -179,5 +179,32 @@ services:
       interval: 10s
       timeout: 10s
 
+  reporting-service:
+    container_name: reporting-service
+    build:
+      context: ../../backend/microservices/reporting-service
+      dockerfile: Dockerfile
+      no_cache: true
+      args:
+        - VERSION=0.1.0
+        - NAME=reporting-service
+    restart: unless-stopped
+    environment:
+      - PORT=8084
+      - CONFIG_HOST=config-server
+    ports:
+      - "8084"
+    depends_on:
+      database:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://reporting-service:8084/actuator/health" ]
+      retries: 5
+      start_period: 120s
+      interval: 10s
+      timeout: 10s
+
 volumes:
   oracledb:

@@ -40,6 +40,12 @@ public class Routes {
                                 .filters(f -> f.stripPrefix(1))
                                 .uri("lb://authentication-service")
                 )
+                .route("reporting_service",
+                        r -> r
+                                .path("/reporting-service/**")
+                                .filters(f -> f.stripPrefix(1))
+                                .uri("lb://reporting-service")
+                )
                 .build();
     }
 

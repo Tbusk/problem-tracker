@@ -42,7 +42,7 @@ This microservice is responsible for authenticating users and issuing JWT tokens
 This microservice is responsible for generating reports and analytics based on user data related to problems and user
 activity.
 
-- Report Service [Later]
+- Java & Spring Boot → [reporting-service](backend/microservices/reporting-service)
 
 This microservice is responsible for generating recommendations based on user activity and goals.
 
