@@ -1,7 +1,7 @@
-package github.io.tbusk.problem_tracker.problemgateway.jwt.auth;
+package github.io.tbusk.problem_tracker.authenticationservice.auth;
 
-import github.io.tbusk.problem_tracker.problemgateway.jwt.dtos.CreateJwtRequest;
-import github.io.tbusk.problem_tracker.problemgateway.jwt.dtos.JwtToken;
+import github.io.tbusk.problem_tracker.authenticationservice.auth.dtos.CreateJwtRequest;
+import github.io.tbusk.problem_tracker.authenticationservice.auth.dtos.JwtToken;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
