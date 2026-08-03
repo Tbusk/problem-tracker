@@ -5,7 +5,7 @@ services:
   problem-gateway:
     container_name: problem-gateway
     build:
-      context: ../problem-gateway
+      context: ../../backend/problem-gateway
       dockerfile: Dockerfile
       no_cache: true
       args:
@@ -34,7 +34,7 @@ services:
   config-server:
     container_name: config-server
     build:
-      context: ../config-server
+      context: ../../backend/config-server
       dockerfile: Dockerfile
       no_cache: true
       args:
@@ -55,7 +55,7 @@ services:
   service-discovery:
     container_name: service-discovery
     build:
-      context: ../service-discovery
+      context: ../../backend/service-discovery
       dockerfile: Dockerfile
       no_cache: true
       args:
@@ -101,7 +101,7 @@ services:
   problem-service:
     container_name: problem-service
     build:
-      context: ../problem-service
+      context: ../../backend/microservices/problem-service
       dockerfile: Dockerfile
       no_cache: true
       args:
@@ -128,7 +128,7 @@ services:
   account-service:
     container_name: account-service
     build:
-      context: ../account-service
+      context: ../../backend/microservices/account-service
       dockerfile: Dockerfile
       no_cache: true
       args:
@@ -155,7 +155,7 @@ services:
   authentication-service:
     container_name: authentication-service
     build:
-      context: ../authentication-service
+      context: ../../backend/microservices/authentication-service
       dockerfile: Dockerfile
       no_cache: true
       args:

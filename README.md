@@ -11,33 +11,33 @@ when building it.
 
 This server is responsible for managing the configuration for microservices and servers in the application.
 
-- Spring Cloud Config Server → [config-server](config-server)
+- Spring Cloud Config Server → [config-server](backend/config-server)
 
 **API Gateway**:
 
 This is responsible for validating authentication via JWT and routing requests to their intended microservices.
 
-- Spring Cloud Gateway → [problem-gateway](problem-gateway)
+- Spring Cloud Gateway → [problem-gateway](backend/problem-gateway)
 
 **Discovery Service**:
 
 This is responsible for registering and discovering microservices in the application.
 
-- Spring Cloud Eureka Server → [service-discovery](service-discovery)
+- Spring Cloud Eureka Server → [service-discovery](backend/service-discovery)
 
 **Microservices**:
 
 This microservice is responsible for managing problems and their associated data.
 
-- Java & Spring Boot → [problem-service](problem-service)
+- Java & Spring Boot → [problem-service](backend/microservices/problem-service)
 
 This microservice is responsible for managing user accounts and their associated data.
 
-- Java & Spring Boot → [account-service](account-service)
+- Java & Spring Boot → [account-service](backend/microservices/account-service)
 
 This microservice is responsible for authenticating users and issuing JWT tokens.
 
-- Java & Spring Boot → [authentication-service](authentication-service)
+- Java & Spring Boot → [authentication-service](backend/microservices/authentication-service)
 
 This microservice is responsible for generating reports and analytics based on user data related to problems and user
 activity.
@@ -65,7 +65,7 @@ This database is responsible for storing data related to problems, users, and us
 To get started:
 
 1. Clone the repository.
-2. Navigate to [development](development)
+2. Navigate to [development](environments/development)
 3. Run `docker compose up -d database` to bootstrap the database. The database will be set up automatically, and be
    ready to use in less than a minute.
 
@@ -79,12 +79,12 @@ To get started:
 
 To get started:
 
-1. Head to [config server](config-server), start it, and review the configuration files and adjustdock as needed in
-   the [resources/config](config-server/src/main/resources/config) directory.
-2. Head to [service-discovery](service-discovery) and start it.
-3. Head to [problem-gateway](problem-gateway) and start it. Send your requests through this with the service name as a
+1. Head to [config server](backend/config-server), start it, and review the configuration files and adjustdock as needed in
+   the [resources/config](backend/config-server/src/main/resources/config) directory.
+2. Head to [service-discovery](backend/service-discovery) and start it.
+3. Head to [problem-gateway](backend/problem-gateway) and start it. Send your requests through this with the service name as a
    prefix.
-4. Head to each of the microservices ([problem-service](problem-service), [account-service](account-service)) and start
+4. Head to each of the microservices ([problem-service](backend/microservices/problem-service), [account-service](backend/microservices/account-service)) and start
    them.
 
 ## Agenda
