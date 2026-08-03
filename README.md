@@ -15,7 +15,7 @@ This server is responsible for managing the configuration for microservices and 
 
 **API Gateway**:
 
-This is responsible for authentication via JWT and routing requests to their intended microservices.
+This is responsible for validating authentication via JWT and routing requests to their intended microservices.
 
 - Spring Cloud Gateway → [problem-gateway](problem-gateway)
 
@@ -34,6 +34,10 @@ This microservice is responsible for managing problems and their associated data
 This microservice is responsible for managing user accounts and their associated data.
 
 - Java & Spring Boot → [account-service](account-service)
+
+This microservice is responsible for authenticating users and issuing JWT tokens.
+
+- Java & Spring Boot → [authentication-service](authentication-service)
 
 This microservice is responsible for generating reports and analytics based on user data related to problems and user
 activity.
@@ -85,8 +89,6 @@ To get started:
 
 ## Agenda
 
-- [ ] Move authentication from gateway to a new authentication microservice
-- [ ] Finish implementing and setting up the authentication microservice
 - [ ] Get user problem fetching set up
 - [ ] Test existing functionality more
 - [ ] Expand problem service functionality

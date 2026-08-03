@@ -1,4 +1,4 @@
-package github.io.tbusk.problem_tracker.problemgateway.user;
+package github.io.tbusk.problem_tracker.authenticationservice.user;
 
 import jakarta.persistence.*;
 

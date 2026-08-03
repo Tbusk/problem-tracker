@@ -1,4 +1,4 @@
-package github.io.tbusk.problem_tracker.problemgateway.jwt.dtos;
+package github.io.tbusk.problem_tracker.authenticationservice.auth.dtos;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

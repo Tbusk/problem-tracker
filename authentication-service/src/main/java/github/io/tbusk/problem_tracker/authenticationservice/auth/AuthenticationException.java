@@ -1,4 +1,4 @@
-package github.io.tbusk.problem_tracker.problemgateway.jwt.auth;
+package github.io.tbusk.problem_tracker.authenticationservice.auth;
 
 /**
  * Exception thrown when user authentication fails, e.g., due to invalid credentials or a locked account.

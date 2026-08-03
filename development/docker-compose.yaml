@@ -152,5 +152,32 @@ services:
       interval: 10s
       timeout: 10s
 
+  authentication-service:
+    container_name: authentication-service
+    build:
+      context: ../authentication-service
+      dockerfile: Dockerfile
+      no_cache: true
+      args:
+        - VERSION=0.1.0
+        - NAME=authentication-service
+    restart: unless-stopped
+    environment:
+      - PORT=8082
+      - CONFIG_HOST=config-server
+    ports:
+      - "8082"
+    depends_on:
+      database:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://authentication-service:8082/actuator/health" ]
+      retries: 5
+      start_period: 120s
+      interval: 10s
+      timeout: 10s
+
 volumes:
   oracledb:

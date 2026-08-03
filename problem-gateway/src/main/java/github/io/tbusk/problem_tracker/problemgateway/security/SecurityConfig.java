@@ -6,8 +6,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
 
@@ -41,8 +39,9 @@ public class SecurityConfig {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .addFilterAt(jwtRequestFilter, SecurityWebFiltersOrder.AUTHENTICATION)
                 .authorizeExchange(auth -> {
-                    auth.pathMatchers(HttpMethod.POST, "/api/v1/auth").permitAll();
+                    auth.pathMatchers(HttpMethod.POST, "/authentication-service/api/v1/auth").permitAll();
                     auth.pathMatchers(HttpMethod.POST, "/account-service/api/v1/create-account").permitAll();
+                    auth.pathMatchers(HttpMethod.GET, "/authentication-service/actuator/health").permitAll();
                     auth.pathMatchers(HttpMethod.GET, "/account-service/actuator/health").permitAll();
                     auth.pathMatchers(HttpMethod.GET, "/problem-service/actuator/health").permitAll();
                     auth.pathMatchers(HttpMethod.GET, "/actuator/health").permitAll();

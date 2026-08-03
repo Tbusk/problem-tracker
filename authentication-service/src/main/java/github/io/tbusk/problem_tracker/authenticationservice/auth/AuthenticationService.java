@@ -1,10 +1,10 @@
-package github.io.tbusk.problem_tracker.problemgateway.jwt.auth;
+package github.io.tbusk.problem_tracker.authenticationservice.auth;
 
-import github.io.tbusk.problem_tracker.problemgateway.jwt.JwtService;
-import github.io.tbusk.problem_tracker.problemgateway.jwt.dtos.CreateJwtRequest;
-import github.io.tbusk.problem_tracker.problemgateway.jwt.dtos.JwtToken;
-import github.io.tbusk.problem_tracker.problemgateway.user.User;
-import github.io.tbusk.problem_tracker.problemgateway.user.UserRepository;
+import github.io.tbusk.problem_tracker.authenticationservice.auth.dtos.CreateJwtRequest;
+import github.io.tbusk.problem_tracker.authenticationservice.auth.dtos.JwtToken;
+import github.io.tbusk.problem_tracker.authenticationservice.jwt.JwtService;
+import github.io.tbusk.problem_tracker.authenticationservice.user.User;
+import github.io.tbusk.problem_tracker.authenticationservice.user.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
