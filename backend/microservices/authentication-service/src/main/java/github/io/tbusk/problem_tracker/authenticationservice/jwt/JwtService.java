@@ -1,6 +1,5 @@
 package github.io.tbusk.problem_tracker.authenticationservice.jwt;
 
-import github.io.tbusk.problem_tracker.authenticationservice.user.User;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,22 +50,37 @@ public class JwtService {
      * Creates a signed JWT token for the given user containing their id, email, and role as claims.
      * The token is valid for the configured number of hours.
      *
-     * @param user the user to create a token for
+     * @param emailAddress the email address to set as the subject and claim of the token
+     * @param accountID the account id to include as a claim of the token
+     * @param roleName the role name to include as a claim of the token
      * @return the signed JWT token string
+     * @throws IllegalArgumentException if {@code emailAddress}, {@code accountID}, or {@code roleName} is null
      */
-    public String createToken(User user) {
+    public String createToken(String emailAddress, Long accountID, String roleName) {
+
+        if (emailAddress == null) {
+            throw new IllegalArgumentException("Email address cannot be null");
+        }
+
+        if (accountID == null) {
+            throw new IllegalArgumentException("Account ID cannot be null");
+        }
+
+        if (roleName == null) {
+            throw new IllegalArgumentException("Role name cannot be null");
+        }
 
         LocalDateTime nDaysFromNowUTC = LocalDateTime.now(ZoneOffset.UTC).plusHours(hoursValid);
 
         return Jwts.builder()
-                .subject(user.getEmailAddress())
+                .subject(emailAddress)
                 .issuer(issuer)
                 .issuedAt(new Date())
                 .expiration(Date.from(nDaysFromNowUTC.toInstant(ZoneOffset.UTC)))
                 .claims(Map.of(
-                        "id", user.getId(),
-                        "emailAddress", user.getEmailAddress(),
-                        "role", user.getRole().getName()
+                        "id", accountID,
+                        "emailAddress", emailAddress,
+                        "role", roleName
                 ))
                 .signWith(getKey())
                 .compact();

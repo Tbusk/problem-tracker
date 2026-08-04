@@ -77,7 +77,9 @@ public class AuthenticationService {
             throw new AuthenticationException("The email address or password is invalid");
         }
 
-        return new JwtToken(jwtService.createToken(user));
+        String jwtToken = jwtService.createToken(user.getEmailAddress(), user.getId(), user.getRole().getName());
+
+        return new JwtToken(jwtToken);
     }
 
     /**
