@@ -2,12 +2,20 @@ package github.io.tbusk.problem_tracker.authenticationservice.auth;
 
 import github.io.tbusk.problem_tracker.authenticationservice.auth.dtos.CreateJwtRequest;
 import github.io.tbusk.problem_tracker.authenticationservice.auth.dtos.JwtToken;
-import github.io.tbusk.problem_tracker.authenticationservice.jwt.JwtService;
 import github.io.tbusk.problem_tracker.authenticationservice.user.User;
 import github.io.tbusk.problem_tracker.authenticationservice.user.UserRepository;
+import io.jsonwebtoken.Jwts;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Date;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -18,17 +26,38 @@ import java.util.Optional;
 public class AuthenticationService {
 
     private UserRepository userRepository;
-    private JwtService jwtService;
 
     /**
-     * Creates a service instance with the required repositories and JWT service.
+     * The secret key used to sign and verify JWT tokens, sourced from application configuration.
+     */
+    @Value("${jwt.key}")
+    private String jwtKey;
+
+    /**
+     * The issuer of the JWT token, sourced from application configuration.
+     */
+    @Value("${jwt.issuer}")
+    private String issuer;
+
+    /**
+     * The cryptographic algorithm used for JWT signing and verification, e.g., HmacSHA256.
+     */
+    @Value("${jwt.algorithm}")
+    private String algorithm;
+
+    /**
+     * The number of hours a newly created JWT token remains valid, sourced from application configuration.
+     */
+    @Value("${jwt.hours-valid}")
+    private int hoursValid;
+
+    /**
+     * Creates a service instance with the required repositories.
      *
      * @param userRepository repository for looking up user accounts
-     * @param jwtService     service for creating JWT tokens
      */
-    public AuthenticationService(UserRepository userRepository, JwtService jwtService) {
+    public AuthenticationService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.jwtService = jwtService;
     }
 
     /**
@@ -77,7 +106,7 @@ public class AuthenticationService {
             throw new AuthenticationException("The email address or password is invalid");
         }
 
-        String jwtToken = jwtService.createToken(user.getEmailAddress(), user.getId(), user.getRole().getName());
+        String jwtToken = createToken(user.getEmailAddress(), user.getId(), user.getRole().getName());
 
         return new JwtToken(jwtToken);
     }
@@ -113,5 +142,41 @@ public class AuthenticationService {
      */
     private boolean validatePassword(String passwordHash, String guessedPassword) {
         return BCrypt.checkpw(guessedPassword, passwordHash);
+    }
+
+    /**
+     * Creates a signed JWT token for the given user containing their id, email, and role as claims.
+     * The token is valid for the configured number of hours.
+     *
+     * @param emailAddress the email address to set as the subject and claim of the token
+     * @param accountID the account id to include as a claim of the token
+     * @param roleName the role name to include as a claim of the token
+     * @return the signed JWT token string
+     */
+    private String createToken(String emailAddress, Long accountID, String roleName) {
+
+        LocalDateTime nDaysFromNowUTC = LocalDateTime.now(ZoneOffset.UTC).plusHours(hoursValid);
+
+        return Jwts.builder()
+                .subject(emailAddress)
+                .issuer(issuer)
+                .issuedAt(new Date())
+                .expiration(Date.from(nDaysFromNowUTC.toInstant(ZoneOffset.UTC)))
+                .claims(Map.of(
+                        "id", accountID,
+                        "emailAddress", emailAddress,
+                        "role", roleName
+                ))
+                .signWith(getKey())
+                .compact();
+    }
+
+    /**
+     * Derives a {@link SecretKey} from the configured JWT key and algorithm.
+     *
+     * @return the secret key used for token signing and verification
+     */
+    private SecretKey getKey() {
+        return new SecretKeySpec(jwtKey.getBytes(StandardCharsets.UTF_8), algorithm);
     }
 }
