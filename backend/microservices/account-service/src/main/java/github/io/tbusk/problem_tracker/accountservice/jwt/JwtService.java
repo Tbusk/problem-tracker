@@ -53,6 +53,11 @@ public class JwtService {
      * @return the claims extracted from the token, or null if parsing fails
      */
     public Claims getClaims(String token) {
+
+        if (token == null || token.isEmpty()) {
+            return null;
+        }
+
         try {
             return Jwts.parser()
                     .verifyWith(getKey())
