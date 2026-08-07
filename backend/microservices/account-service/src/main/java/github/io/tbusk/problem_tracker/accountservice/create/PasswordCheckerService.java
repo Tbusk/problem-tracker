@@ -10,7 +10,7 @@ import java.util.Set;
 @Service
 public class PasswordCheckerService {
 
-    Set<Character> specialCharacters = Set.of(
+    public static final Set<Character> specialCharacters = Set.of(
             '!', '@', '#', '$', '%', '^', '&', '*'
     );
 
