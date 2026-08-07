@@ -22,6 +22,12 @@ public class JwtService {
     private String jwtKey;
 
     /**
+     * The issuer that valid JWT tokens must claim, sourced from application configuration.
+     */
+    @Value("${jwt.issuer}")
+    private String issuer;
+
+    /**
      * The cryptographic algorithm used for JWT signing and verification, e.g., HmacSHA256.
      */
     @Value("${jwt.algorithm}")
@@ -40,8 +46,8 @@ public class JwtService {
     }
 
     /**
-     * Extracts the claims from the given JWT token.
-     * Returns null if the token is malformed, expired, or otherwise invalid.
+     * Extracts the claims from the given JWT token, requiring the token's issuer to match the configured issuer.
+     * Returns null if the token is malformed, expired, has an invalid issuer, or is otherwise invalid.
      *
      * @param token the JWT token to parse
      * @return the claims extracted from the token, or null if parsing fails
@@ -50,6 +56,7 @@ public class JwtService {
         try {
             return Jwts.parser()
                     .verifyWith(getKey())
+                    .requireIssuer(issuer)
                     .build()
                     .parseSignedClaims(token)
                     .getPayload();
