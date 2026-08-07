@@ -38,7 +38,7 @@ public class User {
     /**
      * The timestamp of when the user account was created
      */
-    @Column(name = "CREATED_ON", insertable = false, updatable = false, nullable = false)
+    @Column(name = "CREATED_ON", insertable = false, updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Generated(event = EventType.INSERT)
     private LocalDateTime createdOn;
 
