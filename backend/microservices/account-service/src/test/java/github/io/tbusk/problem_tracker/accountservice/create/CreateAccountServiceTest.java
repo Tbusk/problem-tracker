@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -120,35 +121,86 @@ public class CreateAccountServiceTest {
             "john.doe@example.co.uk"
     })
     void shouldCreateAccountWithValidEmails(String emailAddress) throws InvalidPasswordException {
+        Role role = Mockito.mock(Role.class);
+
         when(userRepository.findByEmailAddress(emailAddress)).thenReturn(Optional.empty());
 
         when(passwordCheckerService.isValidPassword(validPassword)).thenReturn(true);
-
-        Role role = Mockito.mock(Role.class);
 
         when(roleRepository.findByName(Role.DEFAULT_ROLE_NAME)).thenReturn(Optional.of(role));
 
         assertDoesNotThrow(() -> createAccountService.create(new CreateRequestDTO(emailAddress, validPassword)));
     }
 
-    @Test
-    void shouldCreateAccount() throws AccountServiceException {
-        when(userRepository.findByEmailAddress(validEmail)).thenReturn(Optional.empty());
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "test@test.com",
+            "test.user@test.com",
+            "test.admin@gmail.com",
+            "me@outlook.com",
+            "john.doe@example.co.uk"
+    })
+    void shouldCreateAccount(String emailAddress) throws AccountServiceException {
+        Role role = Mockito.mock(Role.class);
+
+        when(userRepository.findByEmailAddress(emailAddress)).thenReturn(Optional.empty());
 
         when(passwordCheckerService.isValidPassword(validPassword)).thenReturn(true);
 
         when(passwordEncoder.encode(validPassword)).thenReturn("encoded");
 
-        Role role = Mockito.mock(Role.class);
-
         when(roleRepository.findByName(Role.DEFAULT_ROLE_NAME)).thenReturn(Optional.of(role));
 
-        CreateSuccessDTO result = createAccountService.create(new CreateRequestDTO(validEmail, validPassword));
+        CreateSuccessDTO result = createAccountService.create(new CreateRequestDTO(emailAddress, validPassword));
 
         assertEquals("Account successfully created! Please log in.", result.message());
 
         verify(passwordCheckerService).isValidPassword(validPassword);
         verify(passwordEncoder).encode(validPassword);
         verify(userRepository).save(any(User.class));
+    }
+
+    @Test
+    void shouldBeEnabledWhenAccountCreated() throws AccountServiceException {
+        Role role = Mockito.mock(Role.class);
+
+        when(userRepository.findByEmailAddress(validEmail)).thenReturn(Optional.empty());
+
+        when(passwordCheckerService.isValidPassword(validPassword)).thenReturn(true);
+
+        when(passwordEncoder.encode(validPassword)).thenReturn("encoded");
+
+        when(roleRepository.findByName(Role.DEFAULT_ROLE_NAME)).thenReturn(Optional.of(role));
+
+        createAccountService.create(new CreateRequestDTO(validEmail, validPassword));
+
+        ArgumentCaptor<User> useCaptor = ArgumentCaptor.forClass(User.class);
+        verify(userRepository).save(useCaptor.capture());
+
+        User user = useCaptor.getValue();
+
+        assertTrue(user.getEnabled());
+    }
+
+    @Test
+    void shouldBeUnlockedWhenAccountCreated() throws AccountServiceException {
+        Role role = Mockito.mock(Role.class);
+
+        when(userRepository.findByEmailAddress(validEmail)).thenReturn(Optional.empty());
+
+        when(passwordCheckerService.isValidPassword(validPassword)).thenReturn(true);
+
+        when(passwordEncoder.encode(validPassword)).thenReturn("encoded");
+
+        when(roleRepository.findByName(Role.DEFAULT_ROLE_NAME)).thenReturn(Optional.of(role));
+
+        createAccountService.create(new CreateRequestDTO(validEmail, validPassword));
+
+        ArgumentCaptor<User> useCaptor = ArgumentCaptor.forClass(User.class);
+        verify(userRepository).save(useCaptor.capture());
+
+        User user = useCaptor.getValue();
+
+        assertFalse(user.getLocked());
     }
 }
