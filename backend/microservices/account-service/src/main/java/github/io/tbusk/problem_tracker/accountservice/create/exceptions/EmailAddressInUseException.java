@@ -8,10 +8,13 @@ import github.io.tbusk.problem_tracker.accountservice.exceptions.AccountServiceE
  * that is already associated with an existing account.
  */
 public class EmailAddressInUseException extends AccountServiceException {
+
+    public static final String MESSAGE = "It looks like this email address is already in use. Please log in instead.";
+
     /**
      * Creates a new exception with a message indicating that the email address is already in use.
      */
     public EmailAddressInUseException() {
-        super("It looks like this email address is already in use. Please log in instead.");
+        super(MESSAGE);
     }
 }
