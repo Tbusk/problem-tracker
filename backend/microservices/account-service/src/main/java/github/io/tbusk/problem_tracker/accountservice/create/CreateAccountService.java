@@ -43,17 +43,22 @@ public class CreateAccountService {
     }
 
     /**
+     * A message indicating that an account has been successfully created, and next steps the user should take.
+     */
+    public static final String SUCCESS_RESPONSE = "Account successfully created! Please log in.";
+
+    /**
      * Creates a new user account from the given request.
      * Validates the input, checks for duplicate email addresses, hashes the password, assigns the default
      * role, and persists the user to the database.
      *
      * @param request the DTO containing the user's email address and password
      * @return a success response indicating the account was created
-     * @throws InvalidPasswordException if the supplied password does not meet requirements
-     * @throws IllegalArgumentException if any required field is null
-     * @throws InvalidEmailException if the email address is not in a valid format
+     * @throws InvalidPasswordException   if the supplied password does not meet requirements
+     * @throws IllegalArgumentException   if any required field is null
+     * @throws InvalidEmailException      if the email address is not in a valid format
      * @throws EmailAddressInUseException if the email address is already associated with an existing account
-     * @throws StateException if the default role is not found
+     * @throws StateException             if the default role is not found
      */
     public CreateSuccessDTO create(CreateRequestDTO request) throws AccountServiceException {
 
@@ -93,6 +98,6 @@ public class CreateAccountService {
 
         userRepository.save(newUser);
 
-        return new CreateSuccessDTO("Account successfully created! Please log in.");
+        return new CreateSuccessDTO(SUCCESS_RESPONSE);
     }
 }
