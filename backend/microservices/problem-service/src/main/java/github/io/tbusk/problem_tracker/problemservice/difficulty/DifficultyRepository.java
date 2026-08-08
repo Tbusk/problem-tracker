@@ -21,10 +21,11 @@ public interface DifficultyRepository extends Repository<Difficulty, Byte> {
     Collection<String> findAll();
 
     /**
-     * Finds a difficulty level by its exact name
+     * Finds a difficulty level by its name (Case-insensitive)
      *
      * @param name the difficulty name to search for, e.g., "Easy"
      * @return an Optional containing the difficulty if found, otherwise empty
      */
+    @Query("select d from Difficulty d where lower(d.name) = lower(:name)")
     Optional<Difficulty> findByName(String name);
 }
