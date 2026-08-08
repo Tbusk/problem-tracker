@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface UserRepository extends PagingAndSortingRepository <User, Long> {
 
     /**
-     * Finds a user by their email address.
+     * Finds a user by their email address (case-insensitive).
      *
      * @param emailAddress the email address to search for
      * @return an {@link Optional} containing the user if found, or an empty {@link Optional} otherwise
