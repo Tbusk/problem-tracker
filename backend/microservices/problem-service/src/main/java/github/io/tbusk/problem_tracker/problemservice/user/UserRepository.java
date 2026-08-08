@@ -13,14 +13,6 @@ import java.util.Optional;
 public interface UserRepository extends PagingAndSortingRepository <User, Long> {
 
     /**
-     * Saves a user to the database, creating a new or updating an existing user
-     *
-     * @param user the user to persist
-     * @return the saved user
-     */
-    User save(User user);
-
-    /**
      * Finds a user by their email address.
      *
      * @param emailAddress the email address to search for
@@ -28,5 +20,4 @@ public interface UserRepository extends PagingAndSortingRepository <User, Long> 
      */
     @Query("select u from User u where lower(u.emailAddress) = lower(:emailAddress)")
     Optional<User> findByEmailAddress(String emailAddress);
-
 }
