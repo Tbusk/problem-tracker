@@ -21,10 +21,11 @@ public interface ProgrammingLanguageRepository extends Repository<ProgrammingLan
     Collection<String> findAll();
 
     /**
-     * Finds a programming language by name
+     * Finds a programming language by name (case-insensitive)
      *
      * @param name the name of the programming language to find
      * @return an optional containing the programming language if found, or an empty optional if not found
      */
+    @Query("select pl from ProgrammingLanguage pl where lower(pl.name) = lower(:name)")
     Optional<ProgrammingLanguage> findByName(String name);
 }
