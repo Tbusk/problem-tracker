@@ -13,13 +13,6 @@ import java.util.Collection;
 public interface UserProblemRepository extends PagingAndSortingRepository<UserProblem, Long> {
 
     /**
-     * Retrieves all user problem records from the database
-     *
-     * @return a collection of all user problem records
-     */
-    Collection<UserProblem> findAll();
-
-    /**
      * Saves a user problem record to the database, creating a new or updating an existing record
      *
      * @param userProblem the user problem to save
