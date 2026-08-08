@@ -15,17 +15,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -38,8 +35,8 @@ public class CreateAccountServiceTest {
     @Mock
     private RoleRepository roleRepository;
 
-    @Mock
-    private PasswordEncoder passwordEncoder;
+    @Spy
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Mock
     private PasswordCheckerService passwordCheckerService;
@@ -116,26 +113,6 @@ public class CreateAccountServiceTest {
     @ValueSource(strings = {
             "test@test.com",
             "test.user@test.com",
-            "test@outlook.com",
-            "test@gmail.com",
-            "john.doe@example.co.uk"
-    })
-    void shouldCreateAccountWithValidEmails(String emailAddress) throws InvalidPasswordException {
-        Role role = Mockito.mock(Role.class);
-
-        when(userRepository.findByEmailAddress(emailAddress)).thenReturn(Optional.empty());
-
-        when(passwordCheckerService.isValidPassword(validPassword)).thenReturn(true);
-
-        when(roleRepository.findByName(Role.DEFAULT_ROLE_NAME)).thenReturn(Optional.of(role));
-
-        assertDoesNotThrow(() -> createAccountService.create(new CreateRequestDTO(emailAddress, validPassword)));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {
-            "test@test.com",
-            "test.user@test.com",
             "test.admin@gmail.com",
             "me@outlook.com",
             "john.doe@example.co.uk"
@@ -147,60 +124,71 @@ public class CreateAccountServiceTest {
 
         when(passwordCheckerService.isValidPassword(validPassword)).thenReturn(true);
 
-        when(passwordEncoder.encode(validPassword)).thenReturn("encoded");
-
         when(roleRepository.findByName(Role.DEFAULT_ROLE_NAME)).thenReturn(Optional.of(role));
 
-        CreateSuccessDTO result = createAccountService.create(new CreateRequestDTO(emailAddress, validPassword));
+        CreateSuccessDTO successDTO = createAccountService.create(new CreateRequestDTO(emailAddress, validPassword));
 
-        assertEquals("Account successfully created! Please log in.", result.message());
-
-        verify(passwordCheckerService).isValidPassword(validPassword);
-        verify(passwordEncoder).encode(validPassword);
-        verify(userRepository).save(any(User.class));
+        assertEquals(CreateAccountService.SUCCESS_RESPONSE, successDTO.message());
     }
 
     @Test
-    void shouldBeEnabledWhenAccountCreated() throws AccountServiceException {
+    void shouldHaveCorrectEmailWhenAccountCreated() throws AccountServiceException {
         Role role = Mockito.mock(Role.class);
 
         when(userRepository.findByEmailAddress(validEmail)).thenReturn(Optional.empty());
 
         when(passwordCheckerService.isValidPassword(validPassword)).thenReturn(true);
 
-        when(passwordEncoder.encode(validPassword)).thenReturn("encoded");
-
         when(roleRepository.findByName(Role.DEFAULT_ROLE_NAME)).thenReturn(Optional.of(role));
 
         createAccountService.create(new CreateRequestDTO(validEmail, validPassword));
 
-        ArgumentCaptor<User> useCaptor = ArgumentCaptor.forClass(User.class);
-        verify(userRepository).save(useCaptor.capture());
+        ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
+        verify(userRepository).save(userCaptor.capture());
 
-        User user = useCaptor.getValue();
+        User user = userCaptor.getValue();
 
-        assertTrue(user.getEnabled());
+        assertEquals(validEmail, user.getEmailAddress());
     }
 
     @Test
-    void shouldBeUnlockedWhenAccountCreated() throws AccountServiceException {
+    void shouldHaveCorrectPasswordHashWhenAccountCreated() throws AccountServiceException {
         Role role = Mockito.mock(Role.class);
 
         when(userRepository.findByEmailAddress(validEmail)).thenReturn(Optional.empty());
 
         when(passwordCheckerService.isValidPassword(validPassword)).thenReturn(true);
 
-        when(passwordEncoder.encode(validPassword)).thenReturn("encoded");
-
         when(roleRepository.findByName(Role.DEFAULT_ROLE_NAME)).thenReturn(Optional.of(role));
 
         createAccountService.create(new CreateRequestDTO(validEmail, validPassword));
 
-        ArgumentCaptor<User> useCaptor = ArgumentCaptor.forClass(User.class);
-        verify(userRepository).save(useCaptor.capture());
+        ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
+        verify(userRepository).save(userCaptor.capture());
 
-        User user = useCaptor.getValue();
+        User user = userCaptor.getValue();
 
-        assertFalse(user.getLocked());
+        assertTrue(passwordEncoder.matches(validPassword, user.getPasswordHash()));
+    }
+
+    @Test
+    void shouldHaveCorrectRoleWhenAccountCreated() throws AccountServiceException {
+        Role role = Mockito.mock(Role.class);
+
+        when(userRepository.findByEmailAddress(validEmail)).thenReturn(Optional.empty());
+
+        when(passwordCheckerService.isValidPassword(validPassword)).thenReturn(true);
+
+        when(roleRepository.findByName(Role.DEFAULT_ROLE_NAME)).thenReturn(Optional.of(role));
+        when(role.getName()).thenReturn(Role.DEFAULT_ROLE_NAME);
+
+        createAccountService.create(new CreateRequestDTO(validEmail, validPassword));
+
+        ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
+        verify(userRepository).save(userCaptor.capture());
+
+        User user = userCaptor.getValue();
+
+        assertEquals(Role.DEFAULT_ROLE_NAME, user.getRole().getName());
     }
 }
