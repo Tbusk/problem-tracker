@@ -59,6 +59,10 @@ public class JwtService {
             return null;
         }
 
+        if (issuer == null || issuer.isEmpty()) {
+            return null;
+        }
+
         try {
             return Jwts.parser()
                     .verifyWith(getKey())
