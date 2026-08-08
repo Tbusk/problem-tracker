@@ -54,6 +54,16 @@ public class Problem {
     @NotNull
     private Difficulty difficulty;
 
+    public Problem(String name, String url, Platform platform, Difficulty difficulty) {
+        this.name = name;
+        this.url = url;
+        this.platform = platform;
+        this.difficulty = difficulty;
+    }
+
+    public Problem() {
+    }
+
     /**
      * Gets the competitive programming problem id
      *
