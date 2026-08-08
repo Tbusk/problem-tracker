@@ -12,14 +12,6 @@ import java.util.Collection;
 public interface ProblemCategoryRepository extends Repository<ProblemCategory, ProblemCategoryID> {
 
     /**
-     * Saves a problem-category mapping to the database
-     *
-     * @param problemCategory the mapping to persist
-     * @return the saved mapping
-     */
-    ProblemCategory save(ProblemCategory problemCategory);
-
-    /**
      * Saves a collection of problem-category mappings to the database
      *
      * @param problemCategories the mappings to persist
