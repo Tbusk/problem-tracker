@@ -28,10 +28,11 @@ public interface CategoryRepository extends Repository<Category, Byte> {
     Collection<Category> findAll();
 
     /**
-     * Finds a category by its exact name
+     * Finds a category by its name (case-insensitive)
      *
      * @param name the category name to search for, e.g., "String"
      * @return an Optional containing the category if found, otherwise empty
      */
+    @Query("select c from Category c where lower(c.name) = lower(:name)")
     Optional<Category> findByName(String name);
 }
