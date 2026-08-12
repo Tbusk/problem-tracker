@@ -26,8 +26,10 @@ the problem tracker application.
 
 ### Testing
 
-- JUnit 5 [Planned]
+- JUnit 5
 - Mockito [Planned]
+- REST Assured
+- H2 Database
 
 ## Current Features
 

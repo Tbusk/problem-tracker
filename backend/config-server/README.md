@@ -17,3 +17,8 @@ problem tracker application.
 ### Development-Related
 
 - Spring Boot Configuration Processor
+
+### Testing
+
+- JUnit 5
+- REST Assured

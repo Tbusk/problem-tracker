@@ -28,8 +28,10 @@ tracker application.
 
 ### Testing
 
-- JUnit 5 [Planned]
-- Mockito [Planned]
+- JUnit 5
+- Mockito
+- REST Assured
+- H2 Database
 
 ## Current Features
 

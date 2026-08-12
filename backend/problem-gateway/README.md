@@ -29,8 +29,8 @@ authentication and routing in addition to functionality like rate limiting and c
 
 ### Testing
 
-- JUnit 5 [Planned]
-- Mockito [Planned]
+- JUnit 5
+- REST Assured
 
 ## Current Features
 
