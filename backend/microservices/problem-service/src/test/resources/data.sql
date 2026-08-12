@@ -65,3 +65,11 @@ INSERT INTO PROBLEM_CATEGORY (PROBLEM_ID, CATEGORY_ID) VALUES ((SELECT ID FROM P
 INSERT INTO PROBLEM_CATEGORY (PROBLEM_ID, CATEGORY_ID) VALUES ((SELECT ID FROM PROBLEM WHERE NAME = 'Climbing Stairs'), (SELECT ID FROM CATEGORY WHERE NAME = 'Dynamic Programming'));
 INSERT INTO PROBLEM_CATEGORY (PROBLEM_ID, CATEGORY_ID) VALUES ((SELECT ID FROM PROBLEM WHERE NAME = 'Course Schedule'), (SELECT ID FROM CATEGORY WHERE NAME = 'Depth-First Search'));
 INSERT INTO PROBLEM_CATEGORY (PROBLEM_ID, CATEGORY_ID) VALUES ((SELECT ID FROM PROBLEM WHERE NAME = 'Course Schedule'), (SELECT ID FROM CATEGORY WHERE NAME = 'Breadth-First Search'));
+
+INSERT INTO ENVIRONMENT (ID, NAME) VALUES (NEXT VALUE FOR ENVIRONMENT_SEQ, 'Pen and Paper'),
+                                          (NEXT VALUE FOR ENVIRONMENT_SEQ, 'Whiteboard'),
+                                          (NEXT VALUE FOR ENVIRONMENT_SEQ, 'Basic IDE'),
+                                          (NEXT VALUE FOR ENVIRONMENT_SEQ, 'Full IDE'),
+                                          (NEXT VALUE FOR ENVIRONMENT_SEQ, 'AI Assisted'),
+                                          (NEXT VALUE FOR ENVIRONMENT_SEQ, 'Online Editor'),
+                                          (NEXT VALUE FOR ENVIRONMENT_SEQ, 'Terminal');
