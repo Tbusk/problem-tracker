@@ -25,6 +25,6 @@ CREATE TABLE PROBLEM_TRACKER.PLATFORM
     CONSTRAINT PLATFORM_DOMAIN_MIN_LENGTH CHECK (LENGTH(DOMAIN) >= 3),
     CONSTRAINT PLATFORM_DOMAIN_CONTAINS_DOT CHECK (DOMAIN LIKE '%.%'));
 
-INSERT INTO PROBLEM_TRACKER.PLATFORM (NAME, DOMAIN) VALUES ('Leetcode', 'leetcode.com');
-INSERT INTO PROBLEM_TRACKER.PLATFORM (NAME, DOMAIN) VALUES ('HackerRank', 'hackerrank.com');
-INSERT INTO PROBLEM_TRACKER.PLATFORM (NAME, DOMAIN) VALUES ('Algo Monster', 'algo.monster');
+INSERT INTO PROBLEM_TRACKER.PLATFORM (NAME, DOMAIN) VALUES ('Leetcode', 'leetcode.com'),
+                                                           ('HackerRank', 'hackerrank.com'),
+                                                           ('Algo Monster', 'algo.monster');
