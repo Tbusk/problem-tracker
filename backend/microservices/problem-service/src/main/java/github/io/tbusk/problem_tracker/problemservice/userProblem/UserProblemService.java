@@ -1,5 +1,8 @@
 package github.io.tbusk.problem_tracker.problemservice.userProblem;
 
+import github.io.tbusk.problem_tracker.problemservice.environment.Environment;
+import github.io.tbusk.problem_tracker.problemservice.environment.EnvironmentRepository;
+import github.io.tbusk.problem_tracker.problemservice.environment.exceptions.EnvironmentNotFoundException;
 import github.io.tbusk.problem_tracker.problemservice.exception.ProblemServiceException;
 import github.io.tbusk.problem_tracker.problemservice.problem.database.Problem;
 import github.io.tbusk.problem_tracker.problemservice.problem.database.ProblemRepository;
@@ -18,7 +21,7 @@ import java.util.Optional;
 
 /**
  * Service responsible for tracking when users solve competitive programming problems, including the
- * programming language used and time taken.
+ * programming language, the environment used, and time taken.
  */
 @Service
 public class UserProblemService {
@@ -32,6 +35,7 @@ public class UserProblemService {
     private final ProblemRepository problemRepository;
     private final ProgrammingLanguageRepository programmingLanguageRepository;
     private final UserProblemRepository userProblemRepository;
+    private final EnvironmentRepository environmentRepository;
 
     /**
      * Creates a service instance with the required repositories
@@ -40,22 +44,25 @@ public class UserProblemService {
      * @param problemRepository             repository for resolving problems
      * @param programmingLanguageRepository repository for resolving programming languages
      * @param userProblemRepository         repository for persisting user problem records
+     * @param environmentRepository         repository for resolving environments
      */
-    public UserProblemService(UserRepository userRepository, ProblemRepository problemRepository, ProgrammingLanguageRepository programmingLanguageRepository, UserProblemRepository userProblemRepository) {
+    public UserProblemService(UserRepository userRepository, ProblemRepository problemRepository, ProgrammingLanguageRepository programmingLanguageRepository, UserProblemRepository userProblemRepository, EnvironmentRepository environmentRepository) {
         this.userRepository = userRepository;
         this.problemRepository = problemRepository;
         this.programmingLanguageRepository = programmingLanguageRepository;
         this.userProblemRepository = userProblemRepository;
+        this.environmentRepository = environmentRepository;
     }
 
     /**
      * Records that a user solved a competitive programming problem, validating the input, resolving the
-     * user, problem, and programming language, and persisting the record to the database.
+     * user, problem, and programming language, environment, and persisting the record to the database.
      *
      * @param emailAddress the email address of the user
-     * @param request      dto containing the problem name, platform, programming language, and minutes taken
+     * @param request      dto containing the problem name, platform, programming language, environment, and minutes
+     *                     taken
      * @return a success response indicating the problem was recorded
-     * @throws ProblemServiceException  if the user, problem, or programming language is not found
+     * @throws ProblemServiceException  if the user, problem, programming language, or environment is not found
      * @throws IllegalArgumentException if a required argument is null or minutes is below {@value #MINUTES_MINIMUM}
      */
     public SuccessResponseDTO add(String emailAddress, AddUserProblemDTO request) throws ProblemServiceException {
@@ -84,6 +91,10 @@ public class UserProblemService {
             throw new IllegalArgumentException("Programming language cannot be empty");
         }
 
+        if (request.environment() == null) {
+            throw new IllegalArgumentException("Environment cannot be empty");
+        }
+
         Optional<User> user = userRepository.findByEmailAddress(emailAddress);
 
         if (user.isEmpty()) {
@@ -108,11 +119,20 @@ public class UserProblemService {
             throw new ProgrammingLanguageNotFoundException();
         }
 
+        Optional<Environment> environment = environmentRepository.findByName(
+                ProblemSanitizer.sanitizeName(request.environment())
+        );
+
+        if (environment.isEmpty()) {
+            throw new EnvironmentNotFoundException();
+        }
+
         UserProblem userProblem = new UserProblem(
                 programmingLanguage.get(),
                 request.minutes(),
                 problem.get(),
-                user.get()
+                user.get(),
+                environment.get()
         );
 
         userProblemRepository.save(userProblem);

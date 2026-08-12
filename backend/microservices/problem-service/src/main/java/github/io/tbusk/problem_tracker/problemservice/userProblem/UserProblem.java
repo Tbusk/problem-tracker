@@ -1,5 +1,6 @@
 package github.io.tbusk.problem_tracker.problemservice.userProblem;
 
+import github.io.tbusk.problem_tracker.problemservice.environment.Environment;
 import github.io.tbusk.problem_tracker.problemservice.problem.database.Problem;
 import github.io.tbusk.problem_tracker.problemservice.programmingLanguage.ProgrammingLanguage;
 import github.io.tbusk.problem_tracker.problemservice.user.User;
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 
 /**
  * Represents data from the USER_PROBLEM table in the database, which tracks when a user solved a competitive
- * programming problem, including the programming language used and time taken.
+ * programming problem, including the programming language used, the environment, and time taken.
  */
 @Entity
 @Table(name = "USER_PROBLEM")
@@ -63,19 +64,29 @@ public class UserProblem {
     private ProgrammingLanguage programmingLanguage;
 
     /**
+     * The environment in which the problem was solved
+     */
+    @ManyToOne
+    @JoinColumn(name = "ENVIRONMENT_ID", nullable = false)
+    @NotNull
+    private Environment environment;
+
+    /**
      * Constructs a new UserProblem instance representing when a user solved a competitive programming
-     * problem, the programming language used, and the time taken.
+     * problem, the programming language used, the environment, and the time taken.
      *
      * @param programmingLanguage the programming language used to solve the problem
      * @param minutes the number of minutes taken to solve the problem
      * @param problem the competitive programming problem that was solved
      * @param user the user who solved the problem
+     * @param environment the environment in which the problem was solved
      */
-    public UserProblem(ProgrammingLanguage programmingLanguage, Float minutes, Problem problem, User user) {
+    public UserProblem(ProgrammingLanguage programmingLanguage, Float minutes, Problem problem, User user, Environment environment) {
         this.programmingLanguage = programmingLanguage;
         this.minutes = minutes;
         this.problem = problem;
         this.user = user;
+        this.environment = environment;
         solvedOn = LocalDateTime.now();
     }
 
@@ -183,5 +194,23 @@ public class UserProblem {
      */
     public void setProgrammingLanguage(ProgrammingLanguage programmingLanguage) {
         this.programmingLanguage = programmingLanguage;
+    }
+
+    /**
+     * Gets the environment in which the problem was solved
+     *
+     * @return the environment
+     */
+    public Environment getEnvironment() {
+        return environment;
+    }
+
+    /**
+     * Sets the environment in which the problem was solved
+     *
+     * @param environment the new environment
+     */
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
     }
 }

@@ -1,5 +1,7 @@
 package github.io.tbusk.problem_tracker.problemservice.userProblem;
 
+import github.io.tbusk.problem_tracker.problemservice.environment.Environment;
+import github.io.tbusk.problem_tracker.problemservice.environment.EnvironmentRepository;
 import github.io.tbusk.problem_tracker.problemservice.problem.database.Problem;
 import github.io.tbusk.problem_tracker.problemservice.problem.database.ProblemRepository;
 import github.io.tbusk.problem_tracker.problemservice.programmingLanguage.ProgrammingLanguage;
@@ -33,23 +35,29 @@ public class UserProblemRepositoryIntegrationTest {
     @Autowired
     private ProgrammingLanguageRepository programmingLanguageRepository;
 
+    @Autowired
+    private EnvironmentRepository environmentRepository;
+
     @Test
     void shouldSaveUserProblem() {
         String emailAddress = "test.user@test.com";
         String problemName = "Two Sum";
         String platformName = "Leetcode";
         String programmingLanguageName = "Java";
+        String environmentName = "Whiteboard";
         Float minutes = 15.5f;
 
         Optional<User> user = userRepository.findByEmailAddress(emailAddress);
         Optional<Problem> problem = problemRepository.findByNameAndPlatform(problemName, platformName);
         Optional<ProgrammingLanguage> programmingLanguage = programmingLanguageRepository.findByName(programmingLanguageName);
+        Optional<Environment> environment = environmentRepository.findByName(environmentName);
 
         assertTrue(user.isPresent());
         assertTrue(problem.isPresent());
         assertTrue(programmingLanguage.isPresent());
+        assertTrue(environment.isPresent());
 
-        UserProblem userProblem = new UserProblem(programmingLanguage.get(), minutes, problem.get(), user.get());
+        UserProblem userProblem = new UserProblem(programmingLanguage.get(), minutes, problem.get(), user.get(), environment.get());
 
         UserProblem saved = userProblemRepository.save(userProblem);
 
@@ -60,6 +68,7 @@ public class UserProblemRepositoryIntegrationTest {
         assertEquals(programmingLanguageName, saved.getProgrammingLanguage().getName());
         assertEquals(minutes, saved.getMinutes());
         assertNotNull(saved.getSolvedOn());
+        assertEquals(environmentName, saved.getEnvironment().getName());
     }
 
     @Test
@@ -67,6 +76,7 @@ public class UserProblemRepositoryIntegrationTest {
         String emailAddress = "test.user@test.com";
         String problemName = "Two Sum";
         String platformName = "Leetcode";
+        String environmentName = "Whiteboard";
         String originalProgrammingLanguageName = "Java";
         String updatedProgrammingLanguageName = "Python3";
         Float originalMinutes = 15.5f;
@@ -76,13 +86,15 @@ public class UserProblemRepositoryIntegrationTest {
         Optional<Problem> problem = problemRepository.findByNameAndPlatform(problemName, platformName);
         Optional<ProgrammingLanguage> originalProgrammingLanguage = programmingLanguageRepository.findByName(originalProgrammingLanguageName);
         Optional<ProgrammingLanguage> updatedProgrammingLanguage = programmingLanguageRepository.findByName(updatedProgrammingLanguageName);
+        Optional<Environment> environment = environmentRepository.findByName(environmentName);
 
         assertTrue(user.isPresent());
         assertTrue(problem.isPresent());
         assertTrue(originalProgrammingLanguage.isPresent());
         assertTrue(updatedProgrammingLanguage.isPresent());
+        assertTrue(environment.isPresent());
 
-        UserProblem userProblem = new UserProblem(originalProgrammingLanguage.get(), originalMinutes, problem.get(), user.get());
+        UserProblem userProblem = new UserProblem(originalProgrammingLanguage.get(), originalMinutes, problem.get(), user.get(), environment.get());
 
         UserProblem saved = userProblemRepository.save(userProblem);
         Long savedId = saved.getId();
@@ -97,5 +109,6 @@ public class UserProblemRepositoryIntegrationTest {
         assertEquals(updatedProgrammingLanguageName, updated.getProgrammingLanguage().getName());
         assertEquals(emailAddress, updated.getUser().getEmailAddress());
         assertEquals(problemName, updated.getProblem().getName());
+        assertEquals(environmentName, updated.getEnvironment().getName());
     }
 }

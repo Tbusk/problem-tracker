@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * @param problemName the name of the problem
  * @param platformName the name of the platform used to solve the problem
  * @param programmingLanguage the programming language used to solve the problem
+ * @param environment the environment used to solve the problem
  * @param minutes the number of minutes spent solving the problem
  */
 public record AddUserProblemDTO(
@@ -19,6 +20,9 @@ public record AddUserProblemDTO(
 
         @Schema(description = "Programming language used to solve the problem", example = "Java")
         String programmingLanguage,
+
+        @Schema(description = "Environment used to solve the problem", example = "Whiteboard")
+        String environment,
 
         @Schema(description = "Number of minutes spent solving the problem", example = "1.5")
         float minutes
