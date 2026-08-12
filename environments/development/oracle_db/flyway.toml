@@ -1,0 +1,10 @@
+[environments.development]
+url = "jdbc:oracle:thin:@//database:1521/FREEPDB1"
+user = "system"
+password = "Abc!1234"
+schemas = ["PROBLEM_TRACKER"]
+
+[flyway]
+environment = "development"
+locations = ["filesystem:/flyway/migrations"]
+createSchemas = true

@@ -90,13 +90,24 @@ services:
       - TZ=UTC
     volumes:
       - oracledb:/opt/oracle/oradata
-      - ./oracle_db/sql:/opt/oracle/scripts/startup
     healthcheck:
       test: [ "CMD", "/opt/oracle/checkDBStatus.sh" ]
       retries: 10
       start_period: 120s
       interval: 10s
       timeout: 10s
+
+  flyway:
+    container_name: flyway
+    image: flyway/flyway:13.2
+    command: migrate
+    volumes:
+      - ./oracle_db/migrations:/flyway/migrations
+      - ./oracle_db/flyway.toml:/flyway/conf/flyway.toml
+    depends_on:
+      database:
+        condition: service_healthy
+    restart: no
 
   problem-service:
     container_name: problem-service
@@ -118,6 +129,8 @@ services:
         condition: service_healthy
       config-server:
         condition: service_healthy
+      flyway:
+        condition: service_completed_successfully
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://problem-service:8080/actuator/health" ]
       retries: 5
@@ -145,6 +158,8 @@ services:
         condition: service_healthy
       config-server:
         condition: service_healthy
+      flyway:
+        condition: service_completed_successfully
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://account-service:8081/actuator/health" ]
       retries: 5
@@ -172,6 +187,8 @@ services:
         condition: service_healthy
       config-server:
         condition: service_healthy
+      flyway:
+        condition: service_completed_successfully
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://authentication-service:8082/actuator/health" ]
       retries: 5
@@ -199,6 +216,8 @@ services:
         condition: service_healthy
       config-server:
         condition: service_healthy
+      flyway:
+        condition: service_completed_successfully
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://reporting-service:8084/actuator/health" ]
       retries: 5

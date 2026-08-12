@@ -54,6 +54,8 @@ This database is responsible for storing data related to problems, users, and us
 
 - Oracle DB
 
+Migrations are handled by flyway.
+
 ## Prerequisites
 
 - Java 21
@@ -66,7 +68,7 @@ To get started:
 
 1. Clone the repository.
 2. Navigate to [development](environments/development)
-3. Run `docker compose up -d database` to bootstrap the database. The database will be set up automatically, and be
+3. Run `docker compose up -d database flyway` to bootstrap the database. The database will be set up automatically by flyway, and be
    ready to use in less than a minute.
 
 ### Development with Docker

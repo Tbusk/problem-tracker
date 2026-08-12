@@ -2,9 +2,10 @@
 
 This database is used to store the problem, user, and user activity data.
 
-The [schema](sql) directory contains all of the SQL scripts and backup files for the database.
+The [schema](migrations) directory contains all of the SQL scripts and backup files for the database.
 
-The database will load the scripts automatically.
+The database will load the scripts automatically through flyway. However, all new tables / views / sequences will need
+to have the permissions granted in [R__grants.sql](migrations/R__grants.sql).
 
 Two accounts will be created:
 
@@ -20,7 +21,8 @@ To connect to the root account:
 - Driver : `Thin`
 - Authentication: `SYSDBA`
 - User : `SYS`
-- Password : your password from the docker-compose.yaml file environment variable `ORACLE_PWD` in [docker-compose.yaml](../docker-compose.yaml)
+- Password : your password from the docker-compose.yaml file environment variable `ORACLE_PWD`
+  in [docker-compose.yaml](../docker-compose.yaml)
 - URL : `jdbc:oracle:thin:@//localhost:1521/FREEPDB1`
 
 To connect to and manage the problem tracker database:
@@ -32,7 +34,7 @@ To connect to and manage the problem tracker database:
 - Driver : `Thin`
 - Authentication: `User & password`
 - User : `PROBLEM_TRACKER`
-- Password : password found in [01-CRATE_MAIN_USER.sql](sql/01-CREATE_MAIN_USER.sql)
+- Password : password found in [V1__Give_main_user_password_and_assign_grants.sql](migrations/V1__Give_main_user_password_and_assign_grants.sql)
 - URL : `jdbc:oracle:thin:@//localhost:1521/FREEPDB1`
 
 One thing to note is your client may connect you by default with transaction mode of manual, meaning all transactions
